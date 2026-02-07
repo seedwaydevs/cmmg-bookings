@@ -1,5 +1,9 @@
+import BentoGrid from "@/components/BentoGrid";
+import BookingSection from "@/components/BookingSection";
 import CardCarouselHero from "@/components/ruixen/card-carousel-hero";
 import { HeroSection } from "@/components/ruixen/hero-section-glass-web";
+import ServicesGrid from "@/components/ServiceGrid";
+import StatsSection from "@/components/StatsSection";
 import { studio1, studio5, studio7 } from "@/lib/imageData";
 
 export default function Home() {
@@ -16,6 +20,10 @@ export default function Home() {
         metaCenter="Content"
         metaRight="Studios"
       />
+      <ServicesGrid />
+      <BentoGrid />
+      <StatsSection />
+      <BookingSection />
     </div>
   );
 }
