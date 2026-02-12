@@ -1,0 +1,125 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Admin {
+  id       String   @id @default(uuid())
+  email    String   @unique
+  password String
+  role     UserRole @default(ADMIN)
+}
+
+model Booking {
+  id      String         @id @default(cuid())
+  service BookingService @default(STUDIO)
+  date    DateTime
+
+  bookingName    String
+  bookingSurname String
+  email          String
+  idCopy         String
+
+  packageId String
+  package   ServicePackage @relation(fields: [packageId], references: [id])
+
+  durationMinutes Int
+
+  // booking price snapshot
+  priceCents Int
+  currency   String @default("ZAR")
+  vatCents   Int    @default(0)
+  totalCents Int
+
+  status BookingStatus @default(PENDING)
+
+  invoice Invoice? // 1 booking -> 0/1 invoice
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+}
+
+model Invoice {
+  id String @id @default(cuid())
+
+  bookingId String  @unique
+  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+
+  number String        @unique // e.g. "INV-2026-000123"
+  status InvoiceStatus @default(ISSUED)
+
+  // snapshot totals (don’t compute later from packages)
+  subtotalCents Int
+  vatCents      Int    @default(0)
+  totalCents    Int
+  currency      String @default("ZAR")
+
+  issuedAt DateTime  @default(now())
+  dueAt    DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model ServicePackage {
+  id      String         @id @default(cuid())
+  service BookingService
+  type    PackageType
+
+  minutes    Int // 120, 240, 360, 420, 480 (or whatever your full day is)
+  priceCents Int
+  currency   String  @default("ZAR")
+  isActive   Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  bookings Booking[]
+
+  @@unique([service, type]) // one package of each type per service
+}
+
+enum UserRole {
+  ADMIN
+}
+
+enum BookingService {
+  STUDIO
+  GREENSCREEN
+  SOUNDMIXING
+  FINALMIX
+}
+
+enum PackageType {
+  TWO_HOURS
+  FOUR_HOURS
+  HALF_DAY_6H
+  HALF_DAY_7H
+  FULL_DAY
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  FULFILLED
+  CANCELLED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  ISSUED
+  PAID
+  VOID
+}
