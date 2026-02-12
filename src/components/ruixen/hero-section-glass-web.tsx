@@ -11,7 +11,7 @@ import Image, { StaticImageData } from "next/image";
 type Action = { href: string; label: string };
 
 export type HeroSectionProps = {
-  imageSrc: StaticImageData[];
+  imageSrc: StaticImageData;
   imageAlt?: string;
   kicker?: string;
   title: string;
@@ -43,13 +43,6 @@ export function HeroSection({
 }: HeroSectionProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % imageSrc.length);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [imageSrc.length]);
   return (
     <section
       className={cn(
@@ -61,17 +54,11 @@ export function HeroSection({
       {/* Background image */}
       <div className="absolute inset-0 -z-10">
         <div className="relative h-full w-full overflow-hidden">
-          {imageSrc.map((src, index) => (
-            <Image
-              key={index}
-              src={src}
-              alt={`${title} - Image ${index + 1}`}
-              className={`absolute inset-0 h-full w-full object-cover object-center scale-105 transition-opacity duration-1000 ${
-                index === currentSlide ? "opacity-90" : "opacity-0"
-              }`}
-              loading={index === 0 ? "eager" : "lazy"}
-            />
-          ))}
+          <Image
+            src={imageSrc}
+            alt={`${title} - Image`}
+            className={`absolute inset-0 h-full w-full object-cover object-center scale-105 transition-opacity duration-1000 `}
+          />
         </div>
         {/* dark vignette + subtle color cast */}
         <div className="absolute inset-0 bg-[radial-gradient(70%_60%_at_20%_35%,rgba(9,9,11,0.25)_0%,rgba(9,9,11,0.65)_60%,rgba(9,9,11,0.85)_100%)]" />

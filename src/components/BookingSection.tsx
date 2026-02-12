@@ -1,274 +1,361 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useTransition } from "react";
+import { useMemo } from "react";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-const BookingSection = () => {
-  const [selectedDate, setSelectedDate] = useState<string>("");
-  const [selectedTime, setSelectedTime] = useState<string>("");
-  const [selectedStudio, setSelectedStudio] = useState<string>("");
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { ServicePackage } from "@/lib/types";
+import { bookingSchema, FormValues } from "@/lib/schemas";
+import { createBooking } from "@/data/bookings/create-booking";
 
-  const studios = [
-    { id: "recording", name: "Recording Studio A", price: "$150/hr" },
-    { id: "greenscreen", name: "Green Screen Studio", price: "$200/hr" },
-    { id: "film", name: "Film Production Stage", price: "$300/hr" },
-    { id: "podcast", name: "Podcast Room", price: "$100/hr" },
-  ];
+function labelForPackageType(type: ServicePackage["type"]) {
+  switch (type) {
+    case "TWO_HOURS":
+      return "2 Hours";
+    case "FOUR_HOURS":
+      return "4 Hours";
+    case "HALF_DAY_6H":
+      return "Half Day (6h)";
+    case "HALF_DAY_7H":
+      return "Half Day (7h)";
+    case "FULL_DAY":
+      return "Full Day";
+  }
+}
 
-  const timeSlots = [
-    "09:00 AM",
-    "10:00 AM",
-    "11:00 AM",
-    "12:00 PM",
-    "01:00 PM",
-    "02:00 PM",
-    "03:00 PM",
-    "04:00 PM",
-    "05:00 PM",
-    "06:00 PM",
-    "07:00 PM",
-    "08:00 PM",
-  ];
+function formatMoneyZAR(cents: number, currency: string) {
+  // You can replace this with Intl.NumberFormat for ZAR if you want
+  const amount = (cents / 100).toFixed(2);
+  return `${currency} ${amount}`;
+}
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle booking submission
-    console.log({ selectedDate, selectedTime, selectedStudio });
-  };
+export default function BookingSection({
+  packages,
+}: {
+  packages: ServicePackage[]; // pass from server/API
+}) {
+  const [pending, startTransition] = useTransition();
+  const [error, setError] = useState<string>();
+  const [success, setSuccess] = useState<string>();
+  const [checked, setChecked] = useState(false);
+  const today = useMemo(() => new Date().toISOString().split("T")[0], []);
+
+  const form = useForm<FormValues>({
+    resolver: zodResolver(bookingSchema),
+    defaultValues: {
+      service: "STUDIO",
+      packageId: "",
+      date: "",
+      time: "",
+      bookingName: "",
+      bookingSurname: "",
+      email: "",
+      idCopy: undefined,
+    },
+  });
+
+  const service = form.watch("service");
+  const packageId = form.watch("packageId");
+
+  const availablePackages = useMemo(() => {
+    return packages
+      .filter((p) => p.isActive && p.service === service)
+      .sort((a, b) => a.minutes - b.minutes);
+  }, [packages, service]);
+
+  const selectedPackage = useMemo(() => {
+    return packages.find((p) => p.id === packageId) ?? null;
+  }, [packages, packageId]);
+
+  function onSubmit(values: FormValues) {
+    setError(undefined);
+    startTransition(async () => {
+      const pkg = packages.find((p) => p.id === values.packageId);
+      if (!pkg) {
+        form.setError("packageId", {
+          message: "Package not found. Please select again.",
+        });
+        return;
+      }
+
+      const dateTimeISO = new Date(
+        `${values.date}T${values.time}:00`,
+      ).toISOString();
+
+      const fd = new FormData();
+      fd.append("service", values.service);
+      fd.append("date", dateTimeISO);
+      fd.append("bookingName", values.bookingName);
+      fd.append("bookingSurname", values.bookingSurname);
+      fd.append("email", values.email.toLowerCase().trim());
+      fd.append("packageId", values.packageId);
+      fd.append("durationMinutes", String(pkg.minutes));
+      fd.append("priceCents", String(pkg.priceCents));
+      fd.append("currency", pkg.currency);
+      if (values.idCopy) {
+        fd.append("IdCopy", values.idCopy);
+      }
+
+      const res = await createBooking(fd);
+      if (!res.success) {
+        setError(res?.message);
+      } else {
+        setSuccess(res.message);
+        form.reset();
+      }
+    });
+  }
 
   return (
     <section className="py-24 bg-background">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
+      <div className="max-w-4xl mx-auto px-6">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-3">
             Book Your Session
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Select your preferred studio, date, and time. We'll confirm your
-            booking within 24 hours.
+          <p className="text-muted-foreground">
+            Choose a service and package. We’ll confirm your booking within 24
+            hours.
           </p>
         </div>
 
-        {/* Booking Form */}
-        <div className="max-w-4xl mx-auto">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Studio Selection */}
-            <div>
-              <label className="block text-foreground font-semibold mb-4 text-lg">
-                Choose Your Studio
-              </label>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {studios.map((studio) => (
-                  <button
-                    key={studio.id}
-                    type="button"
-                    onClick={() => setSelectedStudio(studio.id)}
-                    className={`p-6 rounded-xl border-2 text-left transition-all duration-200 ${
-                      selectedStudio === studio.id
-                        ? "border-primary bg-primary/5"
-                        : "border-border bg-card hover:border-primary/50"
-                    }`}
-                  >
-                    <div className="flex justify-between items-start">
-                      <div>
-                        <h3 className="font-semibold text-foreground mb-1">
-                          {studio.name}
-                        </h3>
-                        <p className="text-sm text-muted-foreground">
-                          Professional equipment included
-                        </p>
-                      </div>
-                      <span className="text-primary font-bold">
-                        {studio.price}
-                      </span>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+            {/* Service */}
+            <FormField
+              control={form.control}
+              name="service"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg font-semibold">
+                    Service
+                  </FormLabel>
+                  <FormControl>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                      {(
+                        [
+                          "STUDIO",
+                          "GREENSCREEN",
+                          "SOUNDMIXING",
+                          "FINALMIX",
+                        ] as const
+                      ).map((s) => {
+                        const active = field.value === s;
+                        return (
+                          <button
+                            key={s}
+                            type="button"
+                            onClick={() => {
+                              field.onChange(s);
+                              form.setValue("packageId", ""); // reset package when service changes
+                            }}
+                            className={`rounded-xl border px-4 py-3 text-sm font-medium transition ${
+                              active
+                                ? "border-primary bg-primary text-primary-foreground"
+                                : "border-border bg-card hover:border-primary/50"
+                            }`}
+                          >
+                            {s}
+                          </button>
+                        );
+                      })}
                     </div>
-                  </button>
-                ))}
-              </div>
-            </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            {/* Date Selection */}
-            <div>
-              <label className="block text-foreground font-semibold mb-4 text-lg">
-                Select Date
-              </label>
-              <input
-                type="date"
-                value={selectedDate}
-                onChange={(e) => setSelectedDate(e.target.value)}
-                min={new Date().toISOString().split("T")[0]}
-                className="w-full p-4 rounded-xl border border-border bg-card text-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                required
-              />
-            </div>
+            {/* Package */}
+            <FormField
+              control={form.control}
+              name="packageId"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg font-semibold">
+                    Package
+                  </FormLabel>
+                  <FormControl>
+                    <select
+                      value={field.value}
+                      onChange={(e) => field.onChange(e.target.value)}
+                      className="w-full rounded-xl border border-border bg-card px-4 py-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
+                    >
+                      <option value="">Select a package...</option>
+                      {availablePackages.map((p) => (
+                        <option key={p.id} value={p.id}>
+                          {labelForPackageType(p.type)} — {p.minutes} min —{" "}
+                          {formatMoneyZAR(p.priceCents, p.currency)}
+                        </option>
+                      ))}
+                    </select>
+                  </FormControl>
+                  {availablePackages.length === 0 && (
+                    <p className="text-sm text-muted-foreground">
+                      No active packages found for {service}.
+                    </p>
+                  )}
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            {/* Time Slot Selection */}
-            <div>
-              <label className="block text-foreground font-semibold mb-4 text-lg">
-                Choose Time Slot
-              </label>
-              <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-                {timeSlots.map((time) => (
-                  <button
-                    key={time}
-                    type="button"
-                    onClick={() => setSelectedTime(time)}
-                    className={`p-3 rounded-lg border text-sm font-medium transition-all duration-200 ${
-                      selectedTime === time
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-card text-foreground hover:border-primary/50"
-                    }`}
-                  >
-                    {time}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Contact Information */}
+            {/* Date + Time */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-foreground font-semibold mb-2">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  placeholder="John Doe"
-                  className="w-full p-4 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-foreground font-semibold mb-2">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  placeholder="john@example.com"
-                  className="w-full p-4 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                  required
-                />
-              </div>
-            </div>
+              <FormField
+                control={form.control}
+                name="date"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-lg font-semibold">
+                      Date
+                    </FormLabel>
+                    <FormControl>
+                      <Input type="date" min={today} {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <div>
-              <label className="block text-foreground font-semibold mb-2">
-                Phone Number
-              </label>
-              <input
-                type="tel"
-                placeholder="+1 (555) 000-0000"
-                className="w-full p-4 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                required
+              <FormField
+                control={form.control}
+                name="time"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-lg font-semibold">
+                      Time
+                    </FormLabel>
+                    <FormControl>
+                      <Input type="time" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
 
-            {/* ID Upload */}
-            <div>
-              <label className="block text-foreground font-semibold mb-2">
-                Upload ID Copy <span className="text-destructive">*</span>
-              </label>
-              <p className="text-sm text-muted-foreground mb-3">
-                Please upload a clear copy of your government-issued ID
-                (Driver's License, Passport, or National ID)
-              </p>
-              <div className="relative">
-                <input
-                  type="file"
-                  accept="image/*,.pdf"
-                  className="w-full p-4 rounded-xl border-2 border-dashed border-border bg-card text-foreground file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-primary file:text-primary-foreground file:font-semibold hover:file:bg-primary/90 file:cursor-pointer cursor-pointer focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
-                  required
-                />
-              </div>
-              <p className="text-xs text-muted-foreground mt-2">
-                Accepted formats: JPG, PNG, PDF (Max 5MB)
-              </p>
-            </div>
+            {/* Name/Surname/Email */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="bookingName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>First Name</FormLabel>
+                    <FormControl>
+                      <Input placeholder="John" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            {/* Vehicle Registration (Optional) */}
-            <div>
-              <label className="block text-foreground font-semibold mb-2">
-                Vehicle Registration{" "}
-                <span className="text-muted-foreground text-sm font-normal">
-                  (Optional)
-                </span>
-              </label>
-              <p className="text-sm text-muted-foreground mb-3">
-                If you're driving to the studio, please provide your vehicle
-                registration number for parking access
-              </p>
-              <input
-                type="text"
-                placeholder="e.g., ABC-1234 or CA 1ABC234"
-                className="w-full p-4 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all"
+              <FormField
+                control={form.control}
+                name="bookingSurname"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Surname</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Doe" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
 
-            {/* Additional Notes */}
-            <div>
-              <label className="block text-foreground font-semibold mb-2">
-                Additional Notes (Optional)
-              </label>
-              <textarea
-                rows={4}
-                placeholder="Tell us about your project or any special requirements..."
-                className="w-full p-4 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-2 focus:ring-primary/20 outline-none transition-all resize-none"
-              />
-            </div>
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="john@example.com"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
-            {/* Submit Button */}
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-between pt-6 border-t border-border">
-              <div className="text-sm text-muted-foreground">
-                <p>
-                  📞 Need help? Call us at{" "}
-                  <span className="text-primary font-semibold">
-                    (555) 123-4567
+            {/* ID Copy */}
+            <FormField
+              control={form.control}
+              name="idCopy"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Upload ID Copy</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="file"
+                      accept="image/*,.pdf"
+                      className="cursor-pointer border-2 border-dashed"
+                      onChange={(e) => field.onChange(e.target.files?.[0])}
+                    />
+                  </FormControl>
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Accepted formats: JPG, PNG, PDF (Max 5MB)
+                  </p>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Summary */}
+            {selectedPackage && (
+              <div className="rounded-xl border border-border bg-card p-4 text-sm">
+                <div className="flex items-center justify-between">
+                  <span className="text-muted-foreground">
+                    Selected package
                   </span>
-                </p>
+                  <span className="font-medium">
+                    {labelForPackageType(selectedPackage.type)}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-muted-foreground">Duration</span>
+                  <span className="font-medium">
+                    {selectedPackage.minutes} minutes
+                  </span>
+                </div>
+                <div className="flex items-center justify-between mt-2">
+                  <span className="text-muted-foreground">Price</span>
+                  <span className="font-semibold text-primary">
+                    {formatMoneyZAR(
+                      selectedPackage.priceCents,
+                      selectedPackage.currency,
+                    )}
+                  </span>
+                </div>
               </div>
-              <button
-                type="submit"
-                className="w-full sm:w-auto px-8 py-4 bg-primary text-primary-foreground rounded-xl font-semibold hover:bg-primary/90 transition-all duration-200 shadow-lg shadow-primary/25"
-              >
+            )}
+
+            <div className="flex justify-end">
+              <Button type="submit" className="rounded-xl px-8 py-6">
                 Confirm Booking
-              </button>
+              </Button>
             </div>
           </form>
-        </div>
-
-        {/* Info Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16 max-w-4xl mx-auto">
-          <div className="p-6 rounded-xl bg-card border border-border text-center">
-            <div className="text-3xl mb-2">✅</div>
-            <h4 className="font-semibold text-foreground mb-2">
-              Instant Confirmation
-            </h4>
-            <p className="text-sm text-muted-foreground">
-              Get confirmed within 24 hours
-            </p>
-          </div>
-          <div className="p-6 rounded-xl bg-card border border-border text-center">
-            <div className="text-3xl mb-2">🔒</div>
-            <h4 className="font-semibold text-foreground mb-2">
-              Secure Payment
-            </h4>
-            <p className="text-sm text-muted-foreground">
-              Pay securely online or in person
-            </p>
-          </div>
-          <div className="p-6 rounded-xl bg-card border border-border text-center">
-            <div className="text-3xl mb-2">🔄</div>
-            <h4 className="font-semibold text-foreground mb-2">
-              Flexible Cancellation
-            </h4>
-            <p className="text-sm text-muted-foreground">
-              Free cancellation up to 48hrs before
-            </p>
-          </div>
-        </div>
+        </Form>
       </div>
     </section>
   );
-};
-
-export default BookingSection;
+}

@@ -28,7 +28,7 @@ model Booking {
   bookingName    String
   bookingSurname String
   email          String
-  idCopy         String
+  idCopy         String?
 
   packageId String
   package   ServicePackage @relation(fields: [packageId], references: [id])

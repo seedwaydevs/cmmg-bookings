@@ -1,17 +1,19 @@
 import BentoGrid from "@/components/BentoGrid";
 import BookingSection from "@/components/BookingSection";
-import CardCarouselHero from "@/components/ruixen/card-carousel-hero";
+
 import { HeroSection } from "@/components/ruixen/hero-section-glass-web";
 import ServicesGrid from "@/components/ServiceGrid";
 import StatsSection from "@/components/StatsSection";
+import { getActivePackages } from "@/data/services/service-packages";
 import { studio1, studio5, studio7 } from "@/lib/imageData";
 
-export default function Home() {
+export default async function Home() {
+  const packages = await getActivePackages();
   return (
     <div>
       <HeroSection
         title="Content And Media Bookings"
-        imageSrc={[studio5, studio1, studio7]}
+        imageSrc={studio5}
         primaryAction={primaryAction}
         secondaryAction={secondaryAction}
         description="State-of-the-art recording studios and green screen facilities equipped with professional-grade equipment, pristine acoustic treatment, and cutting-edge film production technology. "
@@ -23,7 +25,7 @@ export default function Home() {
       <ServicesGrid />
       <BentoGrid />
       <StatsSection />
-      <BookingSection />
+      <BookingSection packages={packages} />
     </div>
   );
 }

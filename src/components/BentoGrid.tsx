@@ -5,23 +5,23 @@ const BentoGrid = () => {
   // You'll replace these with your actual studio images
   const images = [
     {
-      src: "/images/studio-1.jpg",
+      src: "/hire/studio-1.jpg",
       alt: "Recording Studio Main Room",
     },
     {
-      src: "/images/studio-2.jpg",
+      src: "/hire/studio-2.jpg",
       alt: "Green Screen Setup",
     },
     {
-      src: "/images/studio-3.jpg",
+      src: "/hire/studio-3.jpg",
       alt: "Podcast Room",
     },
     {
-      src: "/images/studio-4.jpg",
+      src: "/hire/studio-4.jpg",
       alt: "Film Production Stage",
     },
     {
-      src: "/images/studio-5.jpg",
+      src: "/hire/studio-5.jpg",
       alt: "Equipment Room",
     },
   ];
