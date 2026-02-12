@@ -11,7 +11,7 @@ export default function Home() {
     <div>
       <HeroSection
         title="Content And Media Bookings"
-        imageSrc={[studio5.src, studio1.src, studio7.src]}
+        imageSrc={[studio5, studio1, studio7]}
         primaryAction={primaryAction}
         secondaryAction={secondaryAction}
         description="State-of-the-art recording studios and green screen facilities equipped with professional-grade equipment, pristine acoustic treatment, and cutting-edge film production technology. "

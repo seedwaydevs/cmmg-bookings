@@ -6,11 +6,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { div } from "motion/react-client";
+import Image, { StaticImageData } from "next/image";
 
 type Action = { href: string; label: string };
 
 export type HeroSectionProps = {
-  imageSrc: string[];
+  imageSrc: StaticImageData[];
   imageAlt?: string;
   kicker?: string;
   title: string;
@@ -61,7 +62,7 @@ export function HeroSection({
       <div className="absolute inset-0 -z-10">
         <div className="relative h-full w-full overflow-hidden">
           {imageSrc.map((src, index) => (
-            <img
+            <Image
               key={index}
               src={src}
               alt={`${title} - Image ${index + 1}`}
@@ -89,7 +90,7 @@ export function HeroSection({
       ) : null}
 
       {/* Content */}
-      <div className="container relative mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-16 md:py-24 lg:py-28">
+      <div className="container relative mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 mt-10 py-16 md:py-24 lg:py-28">
         <div className="col-span-1 mt-1 md:col-span-7 lg:col-span-7">
           <Badge
             variant="outline"
