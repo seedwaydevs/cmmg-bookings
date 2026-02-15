@@ -38,8 +38,6 @@ model Booking {
   // booking price snapshot
   priceCents Int
   currency   String @default("ZAR")
-  vatCents   Int    @default(0)
-  totalCents Int
 
   status BookingStatus @default(PENDING)
 
