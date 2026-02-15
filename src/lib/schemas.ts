@@ -25,4 +25,8 @@ export const bookingSchema = z.object({
     .refine((f) => f.size <= 5 * 1024 * 1024, "Max file size is 5MB")
     .optional(),
 });
+export const bookingServerSchema = bookingSchema.omit({
+  time: true,
+  idCopy: true,
+});
 export type FormValues = z.infer<typeof bookingSchema>;
