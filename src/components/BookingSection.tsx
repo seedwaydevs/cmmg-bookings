@@ -19,6 +19,7 @@ import {
 import { ServicePackage } from "@/lib/types";
 import { bookingSchema, FormValues } from "@/lib/schemas";
 import { createBooking } from "@/data/bookings/create-booking";
+import { p } from "motion/react-client";
 
 function labelForPackageType(type: ServicePackage["type"]) {
   switch (type) {
@@ -101,11 +102,12 @@ export default function BookingSection({
       fd.append("bookingSurname", values.bookingSurname);
       fd.append("email", values.email.toLowerCase().trim());
       fd.append("packageId", values.packageId);
-      fd.append("durationMinutes", String(pkg.minutes));
-      fd.append("priceCents", String(pkg.priceCents));
-      fd.append("currency", pkg.currency);
+
       if (values.idCopy) {
         fd.append("IdCopy", values.idCopy);
+      }
+      for (const [key, value] of fd.entries()) {
+        console.log(key, value);
       }
 
       const res = await createBooking(fd);
@@ -119,7 +121,7 @@ export default function BookingSection({
   }
 
   return (
-    <section className="py-24 bg-background">
+    <section className="py-24 bg-background" id="book">
       <div className="max-w-4xl mx-auto px-6">
         <div className="text-center mb-12">
           <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-3">
@@ -355,6 +357,8 @@ export default function BookingSection({
             </div>
           </form>
         </Form>
+        {error && <p className="text-sm text-destructive mt-4">{error}</p>}
+        {success && <p className="text-sm text-green-600 mt-4">{success}</p>}
       </div>
     </section>
   );
