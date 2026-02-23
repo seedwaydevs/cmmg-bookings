@@ -1,227 +1,533 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Github, Twitter, Linkedin, Youtube, Instagram } from "lucide-react";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { logo } from "@/lib/imageData";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
-import { Textarea } from "../ui/textarea";
 
-interface FooterProProps {
-  description?: string;
-  logo?: {
-    dark: string;
-    light: string;
-  };
-  contact?: {
-    email: string;
-    phone: string;
-  };
-  socials?: { icon: any; href: string }[];
-  columns?: {
-    title: string;
-    links: { label: string; href: string }[];
-  }[];
-  copyright?: string;
-}
-
-const defaultProps: FooterProProps = {
-  description:
-    "The ultimate resource for professional sound designers, video producers, podcasters, musicians, content creators, and filmmakers who need world-class recording studios, green screen facilities, and production spaces to bring their creative vision to life.",
-  logo: {
-    dark: logo.src,
-    light: "/ruixen-ui-nw.png",
+const navColumns = [
+  {
+    title: "Company",
+    links: [
+      { label: "About Us", href: "www.cmmg.co.za/about" },
+      {
+        label: "Production Library",
+        href: "https://www.library.cmmg.co.za/library",
+      },
+    ],
   },
-  contact: {
-    email: "support@ruixen ui",
-    phone: "+1 (555) 123-4567",
+  {
+    title: "Services",
+    links: [
+      { label: "Recording Studios", href: "#services" },
+      { label: "Green Screen", href: "#services" },
+      { label: "Podcast Studios", href: "#services" },
+      { label: "Post-Production", href: "#services" },
+    ],
   },
-  socials: [
-    { icon: Github, href: "#" },
-    { icon: Twitter, href: "#" },
-    { icon: Linkedin, href: "#" },
-    { icon: Youtube, href: "#" },
-    { icon: Instagram, href: "#" },
-  ],
-  columns: [
-    {
-      title: "Company",
-      links: [
-        { label: "About Us", href: "#" },
-        { label: "Production Library", href: "#" },
-        { label: "Blog", href: "#" },
-        { label: "Events", href: "#" },
-      ],
-    },
-    {
-      title: "Platform",
-      links: [
-        { label: "Features", href: "#" },
-        { label: "Pricing", href: "#" },
-        { label: "Docs", href: "#" },
-        { label: "API Reference", href: "#" },
-      ],
-    },
-  ],
-  copyright: "© 2024 ruixen ui. All rights reserved.",
-};
+  {
+    title: "Legal",
+    links: [
+      { label: "Privacy Policy", href: "#" },
+      { label: "Terms of Use", href: "#" },
+      { label: "Sitemap", href: "#" },
+    ],
+  },
+];
 
-export default function FooterPro(props?: FooterProProps) {
-  const config: FooterProProps = { ...defaultProps, ...props };
+const socials = [
+  { label: "Instagram", href: "#" },
+  { label: "SoundCloud", href: "#" },
+  { label: "YouTube", href: "#" },
+  { label: "Spotify", href: "#" },
+];
 
-  const socials = config.socials ?? [];
-  const columns = config.columns ?? [];
+export default function Footer() {
+  const [formState, setFormState] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+  const [sent, setSent] = useState(false);
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    // Wire up your form action here
+    setSent(true);
+  }
 
   return (
-    <footer className="bg-white dark:bg-black text-black dark:text-white px-6 py-14 border-t border-gray-200 dark:border-gray-800">
-      <div className="max-w-7xl mx-auto ">
-        {/* Top Section: Logo + Description */}
-        <div
-          className="grid grid-cols-1 md:grid-cols-2 gap-10
-       "
-        >
-          <div className="flex flex-col">
-            <div className="mb-12 ">
-              {config.logo && (
-                <>
-                  <Image
-                    src={config.logo.dark}
-                    alt="Logo"
-                    width={200}
-                    height={50}
-                    className="hidden dark:block h-auto w-auto"
-                  />
-                  <Image
-                    src={config.logo.light}
-                    alt="Logo"
-                    width={180}
-                    height={50}
-                    className="block dark:hidden h-auto w-auto mb-4"
-                  />
-                </>
-              )}
-              <p className="text-start text-sm text-gray-600 dark:text-gray-300 leading-relaxed max-w-lg ">
-                {config.description}
-              </p>
-            </div>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Manrope:wght@300;400;500;600&display=swap');
 
-            <div className=" flex flex-col lg:flex-row lg:justify-between lg:items-start gap-10">
-              {/* Columns */}
-              <div className="grid grid-cols-2  gap-8 flex-1">
-                {columns.map((col, idx) => (
-                  <div key={idx}>
-                    <h3 className="text-sm font-medium mb-3">{col.title}</h3>
-                    <ul className="space-y-2">
-                      {col.links?.map((link, i) => (
-                        <li key={i}>
-                          <Link
-                            href={link.href}
-                            className="text-[0.85rem] text-gray-600 dark:text-gray-300 hover:text-blue-500 transition"
-                          >
-                            {link.label}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
+        .ft-root {
+          background: #0a0a0a;
+          font-family: 'Syne', sans-serif;
+          border-top: 1px solid rgba(255,255,255,0.06);
+        }
+
+        /* ── TOP BAND: big tagline ── */
+        .ft-top {
+          padding: 5rem 3rem 4rem;
+          max-width: 1440px;
+          margin: 0 auto;
+          display: flex;
+          align-items: flex-end;
+          justify-content: space-between;
+          gap: 3rem;
+          border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+        .ft-tagline {
+          font-family: 'Syne', sans-serif;
+          font-size: clamp(2.8rem, 6vw, 6rem);
+          font-weight: 800;
+          letter-spacing: -0.04em;
+          line-height: 0.9;
+          color: #fff;
+          text-transform: uppercase;
+          margin: 0;
+          max-width: 700px;
+        }
+        .ft-tagline span { color: #f05a1a; }
+        .ft-top-right {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 1.25rem;
+          flex-shrink: 0;
+        }
+        .ft-book-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          background: #f05a1a;
+          color: #fff;
+          font-family: 'Syne', sans-serif;
+          font-size: 0.78rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          text-decoration: none;
+          padding: 1rem 2rem;
+          transition: background 0.2s, transform 0.2s;
+        }
+        .ft-book-btn:hover { background: #d44d14; transform: translateY(-1px); }
+        .ft-top-meta {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.65rem;
+          font-weight: 500;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.2);
+          text-align: right;
+        }
+        .ft-top-meta strong {
+          color: #1a8cff;
+          font-weight: 600;
+        }
+
+        /* ── MIDDLE: logo + nav + contact ── */
+        .ft-mid {
+          max-width: 1440px;
+          margin: 0 auto;
+          padding: 4rem 3rem;
+          display: grid;
+          grid-template-columns: 280px 1fr 320px;
+          gap: 4rem;
+          border-bottom: 1px solid rgba(255,255,255,0.06);
+        }
+
+        /* Left: logo + desc + socials */
+        .ft-brand {}
+        .ft-logo {
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+          text-decoration: none;
+          margin-bottom: 1.5rem;
+        }
+        .ft-logo-text {
+          font-family: 'Syne', sans-serif;
+          font-size: 1.35rem;
+          font-weight: 800;
+          color: #fff;
+          letter-spacing: -0.04em;
+        }
+        .ft-logo-dot { color: #f05a1a; font-size: 1.75rem; line-height: 1; }
+        .ft-desc {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.78rem;
+          line-height: 1.75;
+          color: rgba(255,255,255,0.3);
+          margin: 0 0 2rem;
+        }
+        .ft-socials {
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+        }
+        .ft-social-link {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.68rem;
+          font-weight: 500;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.25);
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+          transition: color 0.2s;
+        }
+        .ft-social-link::before {
+          content: '';
+          width: 16px; height: 1px;
+          background: currentColor;
+          transition: width 0.25s;
+        }
+        .ft-social-link:hover { color: #f05a1a; }
+        .ft-social-link:hover::before { width: 28px; }
+
+        /* Centre: nav columns */
+        .ft-nav {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2rem;
+        }
+        .ft-nav-col {}
+        .ft-nav-title {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.58rem;
+          font-weight: 600;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.2);
+          margin-bottom: 1.25rem;
+          display: block;
+        }
+        .ft-nav-list {
+          list-style: none;
+          padding: 0; margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.65rem;
+        }
+        .ft-nav-link {
+          font-family: 'Syne', sans-serif;
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: rgba(255,255,255,0.5);
+          text-decoration: none;
+          letter-spacing: -0.01em;
+          transition: color 0.2s;
+        }
+        .ft-nav-link:hover { color: #fff; }
+
+        /* Right: contact form */
+        .ft-contact {}
+        .ft-contact-label {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.58rem;
+          font-weight: 600;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.2);
+          margin-bottom: 1.25rem;
+          display: block;
+        }
+        .ft-contact-title {
+          font-family: 'Syne', sans-serif;
+          font-size: 1.1rem;
+          font-weight: 700;
+          color: #fff;
+          letter-spacing: -0.02em;
+          margin: 0 0 1.75rem;
+        }
+        .ft-contact-title span { color: #f05a1a; }
+        .ft-form {
+          display: flex;
+          flex-direction: column;
+          gap: 1.25rem;
+        }
+        .ft-field {
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+        }
+        .ft-field-label {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.58rem;
+          font-weight: 600;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.2);
+        }
+        .ft-input {
+          background: transparent;
+          border: none;
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+          padding: 0.6rem 0;
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.82rem;
+          font-weight: 400;
+          color: #fff;
+          outline: none;
+          width: 100%;
+          transition: border-color 0.2s;
+        }
+        .ft-input:focus { border-color: #f05a1a; }
+        .ft-input::placeholder { color: rgba(255,255,255,0.18); }
+        .ft-textarea {
+          background: transparent;
+          border: none;
+          border-bottom: 1px solid rgba(255,255,255,0.1);
+          padding: 0.6rem 0;
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.82rem;
+          color: #fff;
+          outline: none;
+          width: 100%;
+          resize: none;
+          height: 72px;
+          transition: border-color 0.2s;
+        }
+        .ft-textarea:focus { border-color: #f05a1a; }
+        .ft-textarea::placeholder { color: rgba(255,255,255,0.18); }
+        .ft-send-btn {
+          align-self: flex-start;
+          background: none;
+          border: 1px solid rgba(255,255,255,0.15);
+          color: rgba(255,255,255,0.6);
+          font-family: 'Syne', sans-serif;
+          font-size: 0.7rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          padding: 0.65rem 1.5rem;
+          cursor: pointer;
+          transition: border-color 0.2s, color 0.2s, background 0.2s;
+        }
+        .ft-send-btn:hover {
+          border-color: #f05a1a;
+          color: #f05a1a;
+        }
+        .ft-sent-msg {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.75rem;
+          color: #1a8cff;
+          padding: 0.5rem 0;
+        }
+
+        /* ── BOTTOM BAR ── */
+        .ft-bottom {
+          max-width: 1440px;
+          margin: 0 auto;
+          padding: 1.75rem 3rem;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 2rem;
+        }
+        .ft-copyright {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.62rem;
+          font-weight: 400;
+          letter-spacing: 0.08em;
+          color: rgba(255,255,255,0.18);
+        }
+        .ft-bottom-links {
+          display: flex;
+          align-items: center;
+          gap: 2rem;
+        }
+        .ft-bottom-link {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.62rem;
+          font-weight: 500;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          color: rgba(255,255,255,0.18);
+          text-decoration: none;
+          transition: color 0.2s;
+        }
+        .ft-bottom-link:hover { color: rgba(255,255,255,0.5); }
+        .ft-bottom-dot {
+          width: 3px; height: 3px;
+          border-radius: 50%;
+          background: rgba(255,255,255,0.12);
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1100px) {
+          .ft-mid {
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto auto;
+          }
+          .ft-brand { grid-column: 1 / 2; grid-row: 1; }
+          .ft-nav   { grid-column: 2 / 3; grid-row: 1; }
+          .ft-contact { grid-column: 1 / 3; grid-row: 2; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 3rem; }
+        }
+        @media (max-width: 768px) {
+          .ft-top { flex-direction: column; align-items: flex-start; padding: 4rem 1.5rem 3rem; }
+          .ft-top-right { align-items: flex-start; }
+          .ft-top-meta { text-align: left; }
+          .ft-tagline { font-size: clamp(2rem, 8vw, 3.5rem); }
+          .ft-mid { grid-template-columns: 1fr; padding: 3rem 1.5rem; gap: 3rem; }
+          .ft-brand { grid-column: 1; grid-row: auto; }
+          .ft-nav   { grid-column: 1; grid-row: auto; }
+          .ft-contact { grid-column: 1; grid-row: auto; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 2.5rem; }
+          .ft-bottom { flex-direction: column; align-items: flex-start; padding: 1.5rem; gap: 1rem; }
+        }
+        @media (max-width: 480px) {
+          .ft-nav { grid-template-columns: 1fr 1fr; }
+        }
+      `}</style>
+
+      <footer className="ft-root">
+        {/* ── TOP: big tagline + CTA ── */}
+        <div className="ft-top">
+          <h2 className="ft-tagline">
+            Your Sound.
+            <br />
+            Your <span>Vision.</span>
+          </h2>
+          <div className="ft-top-right">
+            <Link href="#book" className="ft-book-btn">
+              Book A Session →
+            </Link>
+            <p className="ft-top-meta">
+              Studios available <strong>24 / 7</strong>
+              <br />
+              Confirmed within 24 hours
+            </p>
+          </div>
+        </div>
+
+        {/* ── MIDDLE: brand + nav + contact ── */}
+        <div className="ft-mid">
+          {/* Brand */}
+          <div className="ft-brand">
+            <Link href="/" className="ft-logo">
+              {/* Swap to <Image> if using logo asset */}
+              <span className="ft-logo-text">CMMG</span>
+              <span className="ft-logo-dot">.</span>
+            </Link>
+            <p className="ft-desc">
+              World-class recording studios, green screen facilities, and
+              production spaces — all under one roof. Built for creators who
+              demand excellence.
+            </p>
+            <div className="ft-socials">
+              {socials.map((s, i) => (
+                <a
+                  key={i}
+                  href={s.href}
+                  className="ft-social-link"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  {s.label}
+                </a>
+              ))}
             </div>
           </div>
-          <div className="flex items-center justify-center ">
-            {/* Right Side: Contact & Socials */}
-            <div className="w-full md:max-w-lg md:mx-auto space-y-4">
-              <Card className="shadow-none border-none">
-                <CardHeader>
-                  <CardTitle>Contact Us</CardTitle>
-                  <CardDescription>
-                    Let us know what you need. <br /> We can help you with
-                    anything.
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="p-0">
-                  <p className="text-sm font-medium mb-2 px-6">Get in Touch</p>
-                  <CardContent>
-                    <form>
-                      <div className="flex flex-col gap-6">
-                        <div className="grid gap-2">
-                          <Label htmlFor="email">Name</Label>
-                          <Input
-                            id="name"
-                            type="name"
-                            placeholder="Name"
-                            required
-                          />
-                        </div>
-                        <div className="grid gap-2">
-                          <Label htmlFor="email">Email</Label>
-                          <Input
-                            id="email"
-                            type="email"
-                            placeholder="m@example.com"
-                            required
-                          />
-                        </div>
-                        <div className="grid gap-2">
-                          <div className="flex items-center">
-                            <Label htmlFor="password">Message</Label>
-                          </div>
-                          <Textarea />
-                        </div>
-                      </div>
-                    </form>
-                  </CardContent>
-                  {config.contact && (
-                    <div className="mt-5 px-6 text-sm text-gray-500 dark:text-gray-400">
-                      Email: {config.contact.email} <br />
-                      Phone: {config.contact.phone}
-                    </div>
-                  )}
-                </CardContent>
-              </Card>
 
-              <Card className="bg-transparent border-none">
-                <CardContent className="flex flex-col justify-center items-center">
-                  <p className="text-sm text-neutral-100 font-medium mb-2">
-                    Follow Us
-                  </p>
-                  <div className="flex gap-3">
-                    {socials.map(({ icon: Icon, href }, idx) => (
-                      <Link
-                        key={idx}
-                        href={href}
-                        className="text-gray-500 dark:text-gray-50 hover:text-blue-500 transition"
-                      >
-                        <Icon className="w-4 h-4" />
+          {/* Nav */}
+          <div className="ft-nav">
+            {navColumns.map((col, i) => (
+              <div key={i} className="ft-nav-col">
+                <span className="ft-nav-title">{col.title}</span>
+                <ul className="ft-nav-list">
+                  {col.links.map((link, j) => (
+                    <li key={j}>
+                      <Link href={link.href} className="ft-nav-link">
+                        {link.label}
                       </Link>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+
+          {/* Contact form */}
+          <div className="ft-contact">
+            <span className="ft-contact-label">Get In Touch</span>
+            <h3 className="ft-contact-title">
+              Let&apos;s talk about your <span>project</span>
+            </h3>
+            {sent ? (
+              <p className="ft-sent-msg">
+                ✓ Message sent — we&apos;ll be in touch soon.
+              </p>
+            ) : (
+              <form className="ft-form" onSubmit={handleSubmit}>
+                <div className="ft-field">
+                  <label className="ft-field-label">Name</label>
+                  <input
+                    className="ft-input"
+                    placeholder="Your name"
+                    value={formState.name}
+                    onChange={(e) =>
+                      setFormState({ ...formState, name: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div className="ft-field">
+                  <label className="ft-field-label">Email</label>
+                  <input
+                    type="email"
+                    className="ft-input"
+                    placeholder="your@email.com"
+                    value={formState.email}
+                    onChange={(e) =>
+                      setFormState({ ...formState, email: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div className="ft-field">
+                  <label className="ft-field-label">Message</label>
+                  <textarea
+                    className="ft-textarea"
+                    placeholder="Tell us about your project..."
+                    value={formState.message}
+                    onChange={(e) =>
+                      setFormState({ ...formState, message: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <button type="submit" className="ft-send-btn">
+                  Send Message →
+                </button>
+              </form>
+            )}
           </div>
         </div>
-        {/* Bottom */}
-        <div className="mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 dark:text-gray-400 gap-4">
-          <p>{config.copyright}</p>
-          <div className="flex gap-6">
-            <Link href="#">Privacy</Link>
-            <Link href="#">Terms</Link>
-            <Link href="#">Sitemap</Link>
+
+        {/* ── BOTTOM BAR ── */}
+        <div className="ft-bottom">
+          <span className="ft-copyright">
+            © {new Date().getFullYear()} CMMG. All rights reserved.
+          </span>
+          <div className="ft-bottom-links">
+            <Link href="#" className="ft-bottom-link">
+              Privacy
+            </Link>
+            <div className="ft-bottom-dot" />
+            <Link href="#" className="ft-bottom-link">
+              Terms
+            </Link>
+            <div className="ft-bottom-dot" />
+            <Link href="#" className="ft-bottom-link">
+              Sitemap
+            </Link>
           </div>
         </div>
-      </div>
-    </footer>
+      </footer>
+    </>
   );
 }
