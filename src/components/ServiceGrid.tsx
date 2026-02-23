@@ -1,172 +1,350 @@
 import React from "react";
 
+const services = [
+  {
+    num: "01",
+    title: "Music Recording Studios",
+    category: "Audio",
+    description:
+      "Professional-grade recording rooms with pristine acoustic treatment, top-tier microphones, and industry-standard consoles — built exclusively for music production and live tracking.",
+    accent: "orange",
+  },
+  {
+    num: "02",
+    title: "Green Screen Studio",
+    category: "Visual",
+    description:
+      "One fully equipped chroma key space that handles film, podcast, and content production. Professional lighting grids, 4K cameras, and seamless green screen setups — all in one studio.",
+    accent: "blue",
+  },
+  {
+    num: "03",
+    title: "Audio Mixing",
+    category: "Mix",
+    description:
+      "Expert balancing of your recorded tracks — levels, panning, EQ, dynamics, and effects — so every element of your music sits perfectly in the mix before mastering.",
+    accent: "orange",
+  },
+  {
+    num: "04",
+    title: "Final Mix & Mastering",
+    category: "Finishing",
+    description:
+      "The last step before release. We polish your mix to industry loudness standards, ensuring it translates flawlessly across streaming platforms, radio, and physical formats.",
+    accent: "blue",
+  },
+];
+
 const ServicesGrid = () => {
-  const services = [
-    {
-      icon: (
-        <svg
-          className="w-8 h-8"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"
-          />
-        </svg>
-      ),
-      title: "Recording Studios",
-      description:
-        "Professional-grade recording rooms with pristine acoustics, top-tier microphones, and industry-standard mixing consoles for music production.",
-    },
-    {
-      icon: (
-        <svg
-          className="w-8 h-8"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-          />
-        </svg>
-      ),
-      title: "Green Screen Studios",
-      description:
-        "Fully equipped chroma key studios with professional lighting grids, 4K cameras, and seamless green/blue screen setups for any production.",
-    },
-    {
-      icon: (
-        <svg
-          className="w-8 h-8"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"
-          />
-        </svg>
-      ),
-      title: "Film Production Spaces",
-      description:
-        "Versatile soundstages with customizable sets, advanced rigging systems, and professional cinema-grade equipment for film and commercial shoots.",
-    },
-    {
-      icon: (
-        <svg
-          className="w-8 h-8"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"
-          />
-        </svg>
-      ),
-      title: "Podcast Studios",
-      description:
-        "Intimate, acoustically treated podcast rooms with multi-track recording, broadcast-quality microphones, and live streaming capabilities.",
-    },
-    {
-      icon: (
-        <svg
-          className="w-8 h-8"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-          />
-        </svg>
-      ),
-      title: "Equipment Rental",
-      description:
-        "Access premium cameras, lighting kits, audio gear, and production equipment. From RED cameras to Neumann microphones, we have it all.",
-    },
-    {
-      icon: (
-        <svg
-          className="w-8 h-8"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-          />
-        </svg>
-      ),
-      title: "Post-Production Suites",
-      description:
-        "State-of-the-art editing bays with color grading stations, audio mixing consoles, and powerful workstations for final touches on your project.",
-    },
-  ];
-
   return (
-    <section className="py-24 bg-background">
-      <div className="max-w-7xl mx-auto px-6">
-        {/* Section Header */}
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">
-            Our Services
-          </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Everything you need to bring your creative vision to life, all under
-            one roof.
-          </p>
-        </div>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600&display=swap');
 
-        {/* Services Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className="group relative bg-card border border-border rounded-2xl p-8 hover:border-border/80 transition-all duration-300 hover:shadow-xl hover:shadow-primary/5"
-            >
-              {/* Icon */}
-              <div className="mb-6 text-foreground group-hover:text-primary transition-colors duration-300">
-                {service.icon}
+        .sg-root {
+          background: #ffffff;
+          padding: 7rem 0 6rem;
+          font-family: 'Syne', sans-serif;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .sg-root::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 1px;
+          background: rgba(0,0,0,0.08);
+        }
+
+        .sg-inner {
+          max-width: 1440px;
+          margin: 0 auto;
+          padding: 0 3rem;
+        }
+
+        /* ── HEADER ── */
+        .sg-header {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          align-items: flex-end;
+          gap: 2rem;
+          margin-bottom: 5rem;
+          padding-bottom: 3rem;
+          border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+        .sg-header-left {}
+        .sg-eyebrow {
+          display: flex;
+          align-items: center;
+          gap: 0.75rem;
+          margin-bottom: 1.5rem;
+        }
+        .sg-eyebrow-line {
+          width: 28px;
+          height: 1px;
+          background: #f05a1a;
+        }
+        .sg-eyebrow-text {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.65rem;
+          font-weight: 500;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: rgba(0,0,0,0.4);
+        }
+        .sg-title {
+          font-family: 'Syne', sans-serif;
+          font-size: clamp(2.5rem, 5vw, 4.5rem);
+          font-weight: 800;
+          letter-spacing: -0.04em;
+          line-height: 0.92;
+          color: #0a0a0a;
+          text-transform: uppercase;
+          margin: 0;
+        }
+        .sg-title span {
+          color: #f05a1a;
+        }
+        .sg-header-right {
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          gap: 1.5rem;
+        }
+        .sg-desc {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.88rem;
+          line-height: 1.75;
+          color: rgba(0,0,0,0.45);
+          max-width: 360px;
+          text-align: right;
+          margin: 0;
+        }
+        .sg-count {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.6rem;
+          letter-spacing: 0.16em;
+          text-transform: uppercase;
+          color: rgba(0,0,0,0.25);
+        }
+        .sg-count strong {
+          color: #1a8cff;
+          font-weight: 600;
+        }
+
+        /* ── GRID ── */
+        .sg-grid {
+          display: grid;
+          grid-template-columns: repeat(2, 1fr);
+          border-top: 1px solid rgba(0,0,0,0.08);
+          border-left: 1px solid rgba(0,0,0,0.08);
+        }
+
+        /* ── CARD ── */
+        .sg-card {
+          position: relative;
+          padding: 2.5rem;
+          border-right: 1px solid rgba(0,0,0,0.08);
+          border-bottom: 1px solid rgba(0,0,0,0.08);
+          transition: background 0.3s ease;
+          overflow: hidden;
+          cursor: default;
+          background: #fff;
+        }
+        .sg-card:hover {
+          background: #fafafa;
+        }
+
+        /* Accent bar — top edge, revealed on hover */
+        .sg-card-bar {
+          position: absolute;
+          top: 0; left: 0; right: 0;
+          height: 2px;
+          transform: scaleX(0);
+          transform-origin: left;
+          transition: transform 0.4s ease;
+        }
+        .sg-card:hover .sg-card-bar { transform: scaleX(1); }
+        .sg-card-bar.orange { background: #f05a1a; }
+        .sg-card-bar.blue   { background: #1a8cff; }
+
+        /* Glow blob on hover */
+        .sg-card-glow {
+          position: absolute;
+          bottom: -40%;
+          right: -20%;
+          width: 200px;
+          height: 200px;
+          border-radius: 50%;
+          opacity: 0;
+          transition: opacity 0.4s ease;
+          pointer-events: none;
+        }
+        .sg-card:hover .sg-card-glow { opacity: 1; }
+        .sg-card-glow.orange { background: radial-gradient(circle, rgba(240,90,26,0.06) 0%, transparent 70%); }
+        .sg-card-glow.blue   { background: radial-gradient(circle, rgba(26,140,255,0.06) 0%, transparent 70%); }
+
+        .sg-card-top {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          margin-bottom: 2rem;
+        }
+        .sg-card-num {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.6rem;
+          font-weight: 500;
+          letter-spacing: 0.16em;
+          color: rgba(0,0,0,0.2);
+        }
+        .sg-card-category {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.55rem;
+          font-weight: 600;
+          letter-spacing: 0.14em;
+          text-transform: uppercase;
+          padding: 0.3rem 0.65rem;
+          border: 1px solid rgba(0,0,0,0.1);
+          color: rgba(0,0,0,0.3);
+          transition: border-color 0.3s, color 0.3s;
+        }
+        .sg-card:hover .sg-card-category.orange {
+          border-color: rgba(240,90,26,0.5);
+          color: #f05a1a;
+        }
+        .sg-card:hover .sg-card-category.blue {
+          border-color: rgba(26,140,255,0.5);
+          color: #1a8cff;
+        }
+
+        .sg-card-title {
+          font-family: 'Syne', sans-serif;
+          font-size: 1.35rem;
+          font-weight: 700;
+          letter-spacing: -0.02em;
+          color: #111;
+          margin: 0 0 1rem;
+          line-height: 1.1;
+          transition: color 0.2s;
+        }
+        .sg-card:hover .sg-card-title { color: #050505; }
+
+        .sg-card-desc {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.82rem;
+          line-height: 1.7;
+          color: rgba(0,0,0,0.45);
+          margin: 0;
+          transition: color 0.3s;
+        }
+        .sg-card:hover .sg-card-desc { color: rgba(0,0,0,0.6); }
+
+        .sg-card-footer {
+          margin-top: 2rem;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+        }
+        .sg-card-link {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.65rem;
+          font-weight: 600;
+          letter-spacing: 0.12em;
+          text-transform: uppercase;
+          color: rgba(0,0,0,0.2);
+          text-decoration: none;
+          transition: color 0.2s;
+          display: flex;
+          align-items: center;
+          gap: 0.4rem;
+        }
+        .sg-card:hover .sg-card-link.orange { color: #f05a1a; }
+        .sg-card:hover .sg-card-link.blue   { color: #1a8cff; }
+        .sg-card-link-arrow {
+          display: inline-block;
+          transform: translateX(-4px);
+          opacity: 0;
+          transition: transform 0.25s ease, opacity 0.25s ease;
+        }
+        .sg-card:hover .sg-card-link-arrow {
+          transform: translateX(0);
+          opacity: 1;
+        }
+
+        /* ── RESPONSIVE ── */
+        @media (max-width: 1024px) {
+          .sg-grid { grid-template-columns: repeat(2, 1fr); }
+          .sg-header { grid-template-columns: 1fr; }
+          .sg-header-right { align-items: flex-start; }
+          .sg-desc { text-align: left; }
+        }
+        @media (max-width: 640px) {
+          .sg-root { padding: 5rem 0 4rem; }
+          .sg-inner { padding: 0 1.5rem; }
+          .sg-grid { grid-template-columns: 1fr; }
+          .sg-card { padding: 2rem 1.5rem; }
+          .sg-header { margin-bottom: 3rem; padding-bottom: 2rem; }
+        }
+      `}</style>
+
+      <section className="sg-root" id="services">
+        <div className="sg-inner">
+          {/* Header */}
+          <div className="sg-header">
+            <div className="sg-header-left">
+              <div className="sg-eyebrow">
+                <div className="sg-eyebrow-line" />
+                <span className="sg-eyebrow-text">What We Offer</span>
               </div>
-
-              {/* Title */}
-              <h3 className="text-xl font-semibold text-foreground mb-3">
-                {service.title}
-              </h3>
-
-              {/* Description */}
-              <p className="text-muted-foreground leading-relaxed">
-                {service.description}
-              </p>
-
-              {/* Hover effect - subtle gradient */}
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/0 to-primary/0 group-hover:from-primary/5 group-hover:to-primary/5 transition-all duration-300 pointer-events-none" />
+              <h2 className="sg-title">
+                Our
+                <br />
+                <span>Services</span>
+              </h2>
             </div>
-          ))}
+            <div className="sg-header-right">
+              <p className="sg-desc">
+                Everything you need to bring your creative vision to life —
+                professional spaces, world-class gear, all under one roof.
+              </p>
+              <span className="sg-count">
+                <strong>04</strong> / Facilities Available
+              </span>
+            </div>
+          </div>
+
+          {/* Grid */}
+          <div className="sg-grid">
+            {services.map((service, index) => (
+              <div key={index} className="sg-card">
+                {/* Top accent bar */}
+                <div className={`sg-card-bar ${service.accent}`} />
+                {/* Glow blob */}
+                <div className={`sg-card-glow ${service.accent}`} />
+
+                <div className="sg-card-top">
+                  <span className="sg-card-num">{service.num}</span>
+                  <span className={`sg-card-category ${service.accent}`}>
+                    {service.category}
+                  </span>
+                </div>
+
+                <h3 className="sg-card-title">{service.title}</h3>
+                <p className="sg-card-desc">{service.description}</p>
+
+                <div className="sg-card-footer">
+                  <a href="#book" className={`sg-card-link ${service.accent}`}>
+                    Book Now
+                    <span className="sg-card-link-arrow">→</span>
+                  </a>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 };
 
