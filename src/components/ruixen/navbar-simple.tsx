@@ -1,7 +1,6 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import Image, { StaticImageData } from "next/image";
 
 // ─── Replace with your actual imports ────────────────────────────────────────
 // import { logo } from "@/lib/imageData";

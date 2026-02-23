@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/incompatible-library */
 "use client";
 
-import React, { useState, useTransition, useMemo } from "react";
+import { useState, useTransition, useMemo } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
@@ -481,8 +482,8 @@ export default function BookingSection({
               Book Your <span>Session</span>
             </h2>
             <p className="bs-subtitle">
-              Choose a service and package. We&apos;ll confirm your booking within 24
-              hours.
+              Choose a service and package. We&apos;ll confirm your booking
+              within 24 hours.
             </p>
           </div>
 

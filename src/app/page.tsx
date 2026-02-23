@@ -5,7 +5,7 @@ import { HeroSection } from "@/components/ruixen/hero-section-glass-web";
 import ServicesGrid from "@/components/ServiceGrid";
 import StatsSection from "@/components/StatsSection";
 import { getActivePackages } from "@/data/services/service-packages";
-import { studio1, studio5, studio7 } from "@/lib/imageData";
+import { studio5 } from "@/lib/imageData";
 
 export default async function Home() {
   const packages = await getActivePackages();

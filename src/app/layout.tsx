@@ -3,8 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import NavbarSimple from "@/components/ruixen/navbar-simple";
 import FooterPro from "@/components/ruixen/footer-pro";
-import { logo } from "@/lib/imageData";
-import { ThemeProvider } from "next-themes";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
