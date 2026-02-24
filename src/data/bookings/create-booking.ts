@@ -2,7 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/db";
-import { bookingSchema, bookingServerSchema } from "@/lib/schemas";
+import { bookingServerSchema } from "@/lib/schemas";
 
 function makeInvoiceNumber() {
   const year = new Date().getFullYear();
