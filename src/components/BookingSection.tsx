@@ -115,7 +115,7 @@ export default function BookingSection({
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Manrope:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Syne:wght@700;800&family=Manrope:wght@400;500;600&display=swap');
 
         .bs-root {
           background: #fff;
@@ -152,14 +152,14 @@ export default function BookingSection({
           color: rgba(0,0,0,0.35);
         }
         .bs-title {
-          font-family: 'Syne', sans-serif;
-          font-size: clamp(2.5rem, 5vw, 4rem);
-          font-weight: 800;
-          letter-spacing: -0.04em;
-          line-height: 0.92;
-          color: #0a0a0a;
-          text-transform: uppercase;
-          margin: 0 0 1rem;
+          font-family: 'Bricolage Grotesque',
+sans-serif;
+font-weight: 800;
+font-size: clamp(5rem, 10vw, 9rem);
+letter-spacing: -0.02em;
+line-height: 0.95;
+text-transform: uppercase;
+color: #000000;
         }
         .bs-title span { color: #f05a1a; }
         .bs-subtitle {

@@ -100,7 +100,7 @@ const StatsSection = () => {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Manrope:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Syne:wght@700;800&family=Manrope:wght@400;500;600&display=swap');
 
         /* ── ROOT: fully dark section ── */
         .ss-root {
@@ -137,14 +137,14 @@ const StatsSection = () => {
           color: rgba(255,255,255,0.3);
         }
         .ss-title {
-          font-family: 'Syne', sans-serif;
-          font-size: clamp(2.5rem, 5vw, 4.5rem);
-          font-weight: 800;
-          letter-spacing: -0.04em;
-          line-height: 0.92;
-          color: #fff;
-          text-transform: uppercase;
-          margin: 0;
+          font-family: 'Bricolage Grotesque',
+sans-serif;
+font-weight: 800;
+font-size: clamp(5rem, 10vw, 9rem);
+letter-spacing: -0.02em;
+line-height: 0.95;
+text-transform: uppercase;
+color: #ffffff;
         }
         .ss-title span { color: #f05a1a; }
         .ss-head-right {

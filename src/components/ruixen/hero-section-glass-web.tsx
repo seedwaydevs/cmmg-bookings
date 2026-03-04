@@ -60,7 +60,7 @@ export function HeroSection({
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Manrope:wght@300;400;500;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Syne:wght@700;800&family=Manrope:wght@400;500;600&display=swap');
 
         .hero-root {
           position: relative;
@@ -225,14 +225,13 @@ export function HeroSection({
         }
 
         .hero-title {
-          font-family: 'Syne', sans-serif;
-          font-size: clamp(3rem, 6vw, 5.5rem);
+          font-family: 'Bricolage Grotesque', sans-serif;
           font-weight: 800;
-          line-height: 0.9;
-          letter-spacing: -0.04em;
-          color: #fff;
-          margin: 0;
+          font-size: clamp(5rem, 10vw, 9rem);
+          letter-spacing: -0.02em;
+          line-height: 0.95;
           text-transform: uppercase;
+          color: #ffffff;
         }
         /* The orange word accent */
         .hero-title em {

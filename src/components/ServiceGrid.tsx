@@ -94,14 +94,14 @@ const ServicesGrid = () => {
           color: rgba(0,0,0,0.4);
         }
         .sg-title {
-          font-family: 'Syne', sans-serif;
-          font-size: clamp(2.5rem, 5vw, 4.5rem);
-          font-weight: 800;
-          letter-spacing: -0.04em;
-          line-height: 0.92;
-          color: #0a0a0a;
-          text-transform: uppercase;
-          margin: 0;
+          font-family: 'Bricolage Grotesque',
+sans-serif;
+font-weight: 800;
+font-size: clamp(5rem, 10vw, 9rem);
+letter-spacing: -0.02em;
+line-height: 0.95;
+text-transform: uppercase;
+color: #000000;
         }
         .sg-title span {
           color: #f05a1a;

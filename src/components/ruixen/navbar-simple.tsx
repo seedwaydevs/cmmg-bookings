@@ -1,6 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import logo from "../../../public/cmmg-logo.png";
 
 // ─── Replace with your actual imports ────────────────────────────────────────
 // import { logo } from "@/lib/imageData";
@@ -344,9 +346,15 @@ const Nav = () => {
           <div className="nav-inner">
             {/* Logo */}
             <Link href="/" className="nav-logo">
-              {/* If using image logo: <Image src={logo} alt="CMMG" width={120} height={40} className="object-contain" /> */}
-              <span className="nav-logo-text">CMMG</span>
-              <span className="nav-logo-dot">.</span>
+              <Image
+                src={logo}
+                alt="CMMG"
+                width={120}
+                height={40}
+                className="object-contain"
+              />
+              {/* <span className="nav-logo-text">CMMG</span>
+              <span className="nav-logo-dot">.</span> */}
             </Link>
 
             {/* Right side */}
