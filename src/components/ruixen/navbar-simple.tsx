@@ -361,7 +361,7 @@ const Nav = () => {
             <div className="nav-right">
               <div className="nav-pill">
                 <span className="nav-status-dot" />
-                Studios Open
+                Studios Open Now
               </div>
               <button
                 className="menu-btn"
