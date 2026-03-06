@@ -58,7 +58,7 @@ const ServicesGrid = () => {
         }
 
         .sg-inner {
-          max-width: 1440px;
+          max-width: 1260px;
           margin: 0 auto;
           padding: 0 3rem;
         }
@@ -97,7 +97,7 @@ const ServicesGrid = () => {
           font-family: 'Bricolage Grotesque',
 sans-serif;
 font-weight: 800;
-font-size: clamp(5rem, 10vw, 9rem);
+font-size: clamp(5rem, 10vw, 7rem);
 letter-spacing: -0.02em;
 line-height: 0.95;
 text-transform: uppercase;

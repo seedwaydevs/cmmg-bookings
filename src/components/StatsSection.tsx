@@ -113,7 +113,7 @@ const StatsSection = () => {
         /* ── TOP HEADER BAND: white on dark ── */
         .ss-head {
           padding: 6rem 3rem 5rem;
-          max-width: 1440px;
+          max-width: 1260px;
           margin: 0 auto;
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -138,13 +138,13 @@ const StatsSection = () => {
         }
         .ss-title {
           font-family: 'Bricolage Grotesque',
-sans-serif;
-font-weight: 800;
-font-size: clamp(5rem, 10vw, 9rem);
-letter-spacing: -0.02em;
-line-height: 0.95;
-text-transform: uppercase;
-color: #ffffff;
+          sans-serif;
+          font-weight: 800;
+          font-size: clamp(5rem, 10vw, 6rem);
+          letter-spacing: -0.02em;
+          line-height: 0.95;
+          text-transform: uppercase;
+          color: #ffffff;
         }
         .ss-title span { color: #f05a1a; }
         .ss-head-right {
@@ -282,12 +282,14 @@ color: #ffffff;
           padding: 2.5rem 3rem;
         }
         .ss-cta-inner {
-          max-width: 1440px;
+          max-width: 1260px;
           margin: 0 auto;
           display: flex;
+          padding: 0 2rem;
           align-items: center;
           justify-content: space-between;
           gap: 2rem;
+         
         }
         .ss-cta-eyebrow {
           font-family: 'Manrope', sans-serif;

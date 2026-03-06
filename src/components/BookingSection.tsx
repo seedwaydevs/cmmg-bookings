@@ -125,7 +125,7 @@ export default function BookingSection({
         }
 
         .bs-inner {
-          max-width: 720px;
+          max-width: 1260px;
           margin: 0 auto;
           padding: 0 2rem;
         }
@@ -153,13 +153,13 @@ export default function BookingSection({
         }
         .bs-title {
           font-family: 'Bricolage Grotesque',
-sans-serif;
-font-weight: 800;
-font-size: clamp(5rem, 10vw, 9rem);
-letter-spacing: -0.02em;
-line-height: 0.95;
-text-transform: uppercase;
-color: #000000;
+          sans-serif;
+          font-weight: 800;
+          font-size: clamp(5rem, 10vw, 7rem);
+          letter-spacing: -0.02em;
+          line-height: 0.95;
+          text-transform: uppercase;
+          color: #000000;
         }
         .bs-title span { color: #f05a1a; }
         .bs-subtitle {
@@ -169,7 +169,11 @@ color: #000000;
           color: rgba(0,0,0,0.4);
           margin: 0;
         }
-
+        .bs-form {
+          max-width: 720px;
+          margin: 0 auto;
+          padding: 0 2rem;
+        }
         /* ── STEP ── */
         .bs-step {
           margin-bottom: 2.75rem;
@@ -488,7 +492,7 @@ color: #000000;
           </div>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="bs-form">
               {/* 01 — Service */}
               <div className="bs-step">
                 <div className="bs-step-header">

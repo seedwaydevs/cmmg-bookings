@@ -211,7 +211,9 @@ export function HeroSection({
           gap: 3rem;
         }
 
-        .hero-title-block {}
+        .hero-title-block {
+          
+        }
 
         /* Eyebrow number */
         .hero-number {
@@ -227,7 +229,7 @@ export function HeroSection({
         .hero-title {
           font-family: 'Bricolage Grotesque', sans-serif;
           font-weight: 800;
-          font-size: clamp(5rem, 10vw, 9rem);
+          font-size: clamp(5rem, 10vw, 7rem);
           letter-spacing: -0.02em;
           line-height: 0.95;
           text-transform: uppercase;

@@ -69,7 +69,7 @@ export default function Footer() {
         /* ── TOP BAND: big tagline ── */
         .ft-top {
           padding: 5rem 3rem 4rem;
-          max-width: 1440px;
+          max-width: 1260px;
           margin: 0 auto;
           display: flex;
           align-items: flex-end;
@@ -79,7 +79,7 @@ export default function Footer() {
         }
         .ft-tagline {
           font-family: 'Syne', sans-serif;
-          font-size: clamp(2.8rem, 6vw, 6rem);
+          font-size: clamp(2.8rem, 6vw, 5rem);
           font-weight: 800;
           letter-spacing: -0.04em;
           line-height: 0.9;
@@ -128,7 +128,7 @@ export default function Footer() {
 
         /* ── MIDDLE: logo + nav + contact ── */
         .ft-mid {
-          max-width: 1440px;
+          max-width: 1260px;
           margin: 0 auto;
           padding: 4rem 3rem;
           display: grid;
@@ -320,7 +320,7 @@ export default function Footer() {
 
         /* ── BOTTOM BAR ── */
         .ft-bottom {
-          max-width: 1440px;
+          max-width: 1260px;
           margin: 0 auto;
           padding: 1.75rem 3rem;
           display: flex;

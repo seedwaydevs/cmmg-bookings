@@ -90,7 +90,7 @@ const BentoGrid = () => {
         }
 
         .bg-inner {
-          max-width: 1440px;
+          max-width: 1260px;
           margin: 0 auto;
           padding: 0 3rem;
         }
