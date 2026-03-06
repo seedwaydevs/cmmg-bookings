@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/db";
 import { bookingServerSchema } from "@/lib/schemas";
+import {sendBookingEmails } from "@/lib/emailService";
 
 function makeInvoiceNumber() {
   const year = new Date().getFullYear();
@@ -59,6 +60,7 @@ export async function createBooking(formData: FormData) {
     },
     select: {
       id: true,
+      type: true,
       minutes: true,
       priceCents: true,
       currency: true,
@@ -89,7 +91,14 @@ export async function createBooking(formData: FormData) {
 
         status: "PENDING",
       },
-      select: { id: true, currency: true, priceCents: true },
+      select: {
+        id: true,
+        currency: true,
+        priceCents: true,
+        bookingName: true,
+        email: true,
+        service: true,
+      },
     });
 
     const invoice = await tx.invoice.create({
@@ -106,6 +115,23 @@ export async function createBooking(formData: FormData) {
     });
 
     return { booking, invoice };
+  });
+  
+  await sendBookingEmails({
+    bookingId: result.booking.id,
+    invoiceNumber: result.invoice.number,
+    bookingName: parsed.data.bookingName,
+    bookingSurname: parsed.data.bookingSurname,
+    email: parsed.data.email,
+    service: parsed.data.service,
+    dateISO: bookingDate.toISOString(),
+    status: "PENDING",
+    pkg: {
+      type: pkg.type,
+      minutes: pkg.minutes,
+      priceCents: pkg.priceCents,
+      currency: pkg.currency,
+    },
   });
 
   revalidatePath("/");
