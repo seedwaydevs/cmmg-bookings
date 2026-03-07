@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/db";
 import { bookingServerSchema } from "@/lib/schemas";
-import {sendBookingEmails } from "@/lib/emailService";
+import { sendBookingEmails } from "@/lib/emailService";
 
 function makeInvoiceNumber() {
   const year = new Date().getFullYear();
@@ -116,7 +116,7 @@ export async function createBooking(formData: FormData) {
 
     return { booking, invoice };
   });
-  
+
   await sendBookingEmails({
     bookingId: result.booking.id,
     invoiceNumber: result.invoice.number,
