@@ -2,7 +2,11 @@
 
 import { revalidatePath } from "next/cache";
 import { db } from "@/db/db";
-import { bookingServerSchema } from "@/lib/schemas";
+import {
+  bookingServerSchema,
+  extrasPayloadSchema,
+  type ExtrasPayload,
+} from "@/lib/schemas";
 import { sendBookingEmails } from "@/lib/emailService";
 
 function makeInvoiceNumber() {
@@ -51,6 +55,29 @@ export async function createBooking(formData: FormData) {
     idCopyKey = await uploadToStorage(idCopyFile);
   }
 
+  // ── Parse extras ───────────────────────────────────────────────
+  // The client appends extras as a JSON string via FormData.
+  // We validate it server-side with the same Zod schema so the DB
+  // never receives malformed data.
+  let extrasPayload: ExtrasPayload | null = null;
+  let extrasCents: number | null = null;
+  let grandTotalCents: number | null = null;
+
+  const extrasRaw = formData.get("extras");
+  if (extrasRaw && typeof extrasRaw === "string") {
+    try {
+      const extrasResult = extrasPayloadSchema.safeParse(JSON.parse(extrasRaw));
+      if (extrasResult.success && extrasResult.data.items.length > 0) {
+        extrasPayload = extrasResult.data;
+        extrasCents = Math.round(extrasPayload.extrasTotal * 100);
+        grandTotalCents = Math.round(extrasPayload.grandTotal * 100);
+      }
+    } catch {
+      // Malformed JSON — proceed without extras rather than failing the booking
+      console.warn("[create-booking] Could not parse extras payload");
+    }
+  }
+
   // ---- Load package from DB (server-side source of truth)
   const pkg = await db.servicePackage.findFirst({
     where: {
@@ -74,6 +101,10 @@ export async function createBooking(formData: FormData) {
     };
   }
 
+  // Derive the true invoice total — use grandTotalCents when extras exist,
+  // fall back to priceCents alone for bookings with no add-ons.
+  const invoiceTotalCents = grandTotalCents ?? pkg.priceCents;
+
   // ---- Transaction: Booking (PENDING) + Invoice (ISSUED)
   const result = await db.$transaction(async (tx) => {
     const booking = await tx.booking.create({
@@ -89,8 +120,14 @@ export async function createBooking(formData: FormData) {
         priceCents: pkg.priceCents,
         currency: pkg.currency,
 
+        // ── extras fields (null when no add-ons selected) ──
+        extras: extrasPayload ?? undefined,
+        extrasCents,
+        grandTotalCents,
+
         status: "PENDING",
       },
+
       select: {
         id: true,
         currency: true,
@@ -98,6 +135,7 @@ export async function createBooking(formData: FormData) {
         bookingName: true,
         email: true,
         service: true,
+        extras: true,
       },
     });
 
@@ -106,9 +144,9 @@ export async function createBooking(formData: FormData) {
         bookingId: booking.id,
         number: makeInvoiceNumber(),
         status: "ISSUED",
-        subtotalCents: booking.priceCents,
+        subtotalCents: invoiceTotalCents,
         vatCents: 0,
-        totalCents: booking.priceCents,
+        totalCents: invoiceTotalCents,
         currency: booking.currency,
       },
       select: { id: true, number: true },
@@ -132,6 +170,9 @@ export async function createBooking(formData: FormData) {
       priceCents: pkg.priceCents,
       currency: pkg.currency,
     },
+    // Pass extras through so the email template can render the line items
+    // if your sendBookingEmails function supports it (optional — won't break if not).
+    ...(extrasPayload ? { extras: extrasPayload } : {}),
   });
 
   revalidatePath("/");
