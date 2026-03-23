@@ -39,6 +39,11 @@ model Booking {
   priceCents Int
   currency   String @default("ZAR")
 
+  // production add-ons snapshot — null if no extras were selected
+  extras          Json? // stores ExtrasPayload: { items, extrasTotal, grandTotal }
+  extrasCents     Int? // extras total in cents, for easy arithmetic with priceCents
+  grandTotalCents Int? // priceCents + extrasCents — the true invoice total
+
   status BookingStatus @default(PENDING)
 
   invoice Invoice? // 1 booking -> 0/1 invoice
@@ -58,7 +63,7 @@ model Invoice {
   number String        @unique // e.g. "INV-2026-000123"
   status InvoiceStatus @default(ISSUED)
 
-  // snapshot totals (don’t compute later from packages)
+  // snapshot totals (don't compute later from packages)
   subtotalCents Int
   vatCents      Int    @default(0)
   totalCents    Int
@@ -101,10 +106,7 @@ enum BookingService {
 }
 
 enum PackageType {
-  TWO_HOURS
-  FOUR_HOURS
-  HALF_DAY_6H
-  HALF_DAY_7H
+  HALF_DAY
   FULL_DAY
 }
 
