@@ -86,7 +86,7 @@ export function HeroSection({
           height: 100%;
           object-fit: cover;
           object-position: center;
-          filter: saturate(0.6) brightness(0.45);
+          filter: saturate(0.9) brightness(1);
           transform: scale(1.04);
           transition: transform 8s ease, opacity 1.2s ease;
         }
@@ -221,7 +221,7 @@ export function HeroSection({
           font-size: 0.65rem;
           font-weight: 400;
           letter-spacing: 0.2em;
-          color: rgba(255,255,255,0.2);
+          color: rgba(255,255,255,0.6);
           margin-bottom: 1.25rem;
           display: block;
         }
@@ -306,7 +306,7 @@ export function HeroSection({
           font-size: 0.88rem;
           font-weight: 400;
           line-height: 1.7;
-          color: rgba(255,255,255,0.5);
+          color: rgba(255,255,255,0.9);
           margin: 0;
         }
         .hero-tags {
@@ -320,7 +320,7 @@ export function HeroSection({
           font-weight: 600;
           letter-spacing: 0.14em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.45);
+          color: rgba(255,255,255,0.65);
           border: 1px solid rgba(255,255,255,0.1);
           padding: 0.35rem 0.75rem;
           transition: border-color 0.2s, color 0.2s;
