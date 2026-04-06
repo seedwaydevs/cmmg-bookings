@@ -24,6 +24,8 @@ export async function createBooking(formData: FormData) {
     email: String(formData.get("email") ?? "")
       .toLowerCase()
       .trim(),
+    bundleEligibilityConfirmed:
+      String(formData.get("bundleEligibilityConfirmed") ?? "") === "true",
   };
 
   const parsed = bookingServerSchema.safeParse(raw);
@@ -84,10 +86,16 @@ export async function createBooking(formData: FormData) {
       id: parsed.data.packageId,
       service: parsed.data.service,
       isActive: true,
+      isBookableOnline: true,
     },
     select: {
       id: true,
-      type: true,
+      name: true,
+      category: true,
+      durationLabel: true,
+      description: true,
+      includes: true,
+      requiresPaidFullDayStudioBooking: true,
       minutes: true,
       priceCents: true,
       currency: true,
@@ -98,6 +106,17 @@ export async function createBooking(formData: FormData) {
     return {
       success: false as const,
       message: "That package is not available.",
+    };
+  }
+
+  if (
+    pkg.requiresPaidFullDayStudioBooking &&
+    !parsed.data.bundleEligibilityConfirmed
+  ) {
+    return {
+      success: false as const,
+      message:
+        "Please confirm that a full-day music studio booking has already been paid for before choosing the studio bundle.",
     };
   }
 
@@ -116,6 +135,13 @@ export async function createBooking(formData: FormData) {
         email: parsed.data.email,
         idCopy: idCopyKey ?? "",
         packageId: pkg.id,
+        packageName: pkg.name,
+        packageCategory: pkg.category,
+        packageDurationLabel: pkg.durationLabel,
+        packageDescription: pkg.description,
+        packageIncludes: pkg.includes,
+        bundleEligibilityConfirmed:
+          parsed.data.bundleEligibilityConfirmed ?? false,
         durationMinutes: pkg.minutes,
         priceCents: pkg.priceCents,
         currency: pkg.currency,
@@ -165,7 +191,11 @@ export async function createBooking(formData: FormData) {
     dateISO: bookingDate.toISOString(),
     status: "PENDING",
     pkg: {
-      type: pkg.type,
+      name: pkg.name,
+      category: pkg.category,
+      durationLabel: pkg.durationLabel,
+      description: pkg.description,
+      includes: pkg.includes,
       minutes: pkg.minutes,
       priceCents: pkg.priceCents,
       currency: pkg.currency,
