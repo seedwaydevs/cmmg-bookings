@@ -2,8 +2,16 @@ import { BookingService } from "./schemas";
 
 export type ServicePackage = {
   id: string;
+  slug: string | null;
   service: BookingService;
-  type: "HALF_DAY" | "FULL_DAY";
+  category: string;
+  name: string;
+  durationLabel: string;
+  description: string | null;
+  includes: string[];
+  requiresPaidFullDayStudioBooking: boolean;
+  isBookableOnline: boolean;
+  displayOrder: number;
   minutes: number;
   priceCents: number;
   currency: string;

@@ -8,9 +8,6 @@ export const BookingServiceEnum = z.enum([
 ]);
 export type BookingService = z.infer<typeof BookingServiceEnum>;
 
-export const PackageTypeEnum = z.enum(["HALF_DAY", "FULL_DAY"]);
-export type PackageType = z.infer<typeof PackageTypeEnum>;
-
 export const BookingStatusEnum = z.enum([
   "PENDING",
   "CONFIRMED",
@@ -50,6 +47,7 @@ export const bookingSchema = z.object({
   bookingName: z.string().min(2, "Name is required"),
   bookingSurname: z.string().min(2, "Surname is required"),
   email: z.string().email("Enter a valid email"),
+  bundleEligibilityConfirmed: z.boolean().optional(),
 
   idCopy: z
     .custom<File>((v) => v instanceof File, "Please upload your ID copy")
@@ -64,3 +62,20 @@ export const bookingServerSchema = bookingSchema.omit({
 });
 
 export type FormValues = z.infer<typeof bookingSchema>;
+
+export const enquiryOptionSchema = z.object({
+  key: z.string(),
+  label: z.string(),
+});
+
+export const enquirySchema = z.object({
+  selectedOfferings: z
+    .array(enquiryOptionSchema)
+    .min(1, "Please choose at least one service or general enquiry."),
+  customerName: z.string().min(2, "Name is required"),
+  customerEmail: z.string().email("Enter a valid email"),
+  customerPhone: z.string().min(7, "Phone number is required"),
+  message: z.string().min(10, "Please share a few details about your enquiry"),
+});
+
+export type EnquiryValues = z.infer<typeof enquirySchema>;
