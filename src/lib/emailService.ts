@@ -1,11 +1,19 @@
 import "server-only";
 import nodemailer from "nodemailer";
 
-import { PackageType, BookingService } from "./schemas";
-import type { BookingStatus, ExtrasPayload } from "./schemas";
+import { BookingService } from "./schemas";
+import type {
+  BookingStatus,
+  EnquiryValues,
+  ExtrasPayload,
+} from "./schemas";
 
 type ServicePackage = {
-  type: PackageType;
+  name: string;
+  category: string;
+  durationLabel: string;
+  description: string | null;
+  includes: string[];
   minutes: number;
   priceCents: number;
   currency: string;
@@ -30,12 +38,16 @@ function formatZAR(cents: number, currency: string) {
   );
 }
 
-function labelForPackageType(type: PackageType) {
-  switch (type) {
-    case "HALF_DAY":
-      return "Half Day";
-    case "FULL_DAY":
-      return "Full Day";
+function serviceLabel(service: BookingService) {
+  switch (service) {
+    case "STUDIO":
+      return "Music Studio";
+    case "GREENSCREEN":
+      return "Green Screen Studio";
+    case "SOUNDMIXING":
+      return "Sound Mixing";
+    case "FINALMIX":
+      return "Final Mix";
   }
 }
 
@@ -124,11 +136,19 @@ function bookingTableHTML(p: BookingEmailPayload) {
       </tr>
       <tr>
         <td style="padding:10px; border:1px solid #e5e7eb; background:#f9fafb;"><strong>Service</strong></td>
-        <td style="padding:10px; border:1px solid #e5e7eb;">${p.service}</td>
+        <td style="padding:10px; border:1px solid #e5e7eb;">${serviceLabel(p.service)}</td>
       </tr>
       <tr>
-        <td style="padding:10px; border:1px solid #e5e7eb; background:#f9fafb;"><strong>Package</strong></td>
-        <td style="padding:10px; border:1px solid #e5e7eb;">${labelForPackageType(p.pkg.type)} (${p.pkg.minutes} minutes)</td>
+        <td style="padding:10px; border:1px solid #e5e7eb; background:#f9fafb;"><strong>Offering</strong></td>
+        <td style="padding:10px; border:1px solid #e5e7eb;">${escapeHtml(p.pkg.name)}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px; border:1px solid #e5e7eb; background:#f9fafb;"><strong>Category</strong></td>
+        <td style="padding:10px; border:1px solid #e5e7eb;">${escapeHtml(p.pkg.category)}</td>
+      </tr>
+      <tr>
+        <td style="padding:10px; border:1px solid #e5e7eb; background:#f9fafb;"><strong>Duration</strong></td>
+        <td style="padding:10px; border:1px solid #e5e7eb;">${escapeHtml(p.pkg.durationLabel)} (${p.pkg.minutes} minutes)</td>
       </tr>
       <tr>
         <td style="padding:10px; border:1px solid #e5e7eb; background:#f9fafb;"><strong>Date & Time</strong></td>
@@ -163,6 +183,11 @@ function customerEmailHTML(p: BookingEmailPayload) {
   const grandTotal = p.extras
     ? formatZAR(Math.round(p.extras.grandTotal * 100), p.pkg.currency)
     : formatZAR(p.pkg.priceCents, p.pkg.currency);
+  const includesHtml = p.pkg.includes.length
+    ? `<ul style="margin:10px 0 0; padding-left:18px; font-family:ui-sans-serif, system-ui; font-size:14px; color:#111827;">${p.pkg.includes
+        .map((item) => `<li>${escapeHtml(item)}</li>`)
+        .join("")}</ul>`
+    : "";
 
   return `
   <div style="max-width:640px; margin:0 auto; padding:20px;">
@@ -171,6 +196,12 @@ function customerEmailHTML(p: BookingEmailPayload) {
       Hi ${escapeHtml(p.bookingName)}, your booking request has been received. We'll confirm it once payment is received.
     </p>
     ${bookingTableHTML(p)}
+    ${
+      p.pkg.description
+        ? `<p style="margin:16px 0 0; font-family:ui-sans-serif, system-ui; font-size:14px; color:#111827;">${escapeHtml(p.pkg.description)}</p>`
+        : ""
+    }
+    ${includesHtml}
     ${p.extras ? extrasTableHTML(p.extras, p.pkg) : ""}
     ${paymentInfoHTML(p.invoiceNumber, grandTotal)}
     <p style="margin:18px 0 0; font-family:ui-sans-serif, system-ui; font-size:12px; color:#6b7280;">
@@ -184,6 +215,11 @@ function adminEmailHTML(p: BookingEmailPayload) {
   const grandTotal = p.extras
     ? formatZAR(Math.round(p.extras.grandTotal * 100), p.pkg.currency)
     : formatZAR(p.pkg.priceCents, p.pkg.currency);
+  const includesHtml = p.pkg.includes.length
+    ? `<ul style="margin:10px 0 0; padding-left:18px; font-family:ui-sans-serif, system-ui; font-size:14px; color:#111827;">${p.pkg.includes
+        .map((item) => `<li>${escapeHtml(item)}</li>`)
+        .join("")}</ul>`
+    : "";
 
   return `
   <div style="max-width:640px; margin:0 auto; padding:20px;">
@@ -192,6 +228,12 @@ function adminEmailHTML(p: BookingEmailPayload) {
       A new booking has been created and an invoice number has been issued.
     </p>
     ${bookingTableHTML(p)}
+    ${
+      p.pkg.description
+        ? `<p style="margin:16px 0 0; font-family:ui-sans-serif, system-ui; font-size:14px; color:#111827;">${escapeHtml(p.pkg.description)}</p>`
+        : ""
+    }
+    ${includesHtml}
     ${p.extras ? extrasTableHTML(p.extras, p.pkg) : ""}
     ${paymentInfoHTML(p.invoiceNumber, grandTotal)}
   </div>
@@ -230,6 +272,84 @@ export async function sendBookingEmails(payload: BookingEmailPayload) {
     to: admin,
     subject: `New booking ${payload.invoiceNumber} — ${payload.service}`,
     html: adminEmailHTML(payload),
+  });
+}
+
+function enquirySelectionsHTML(selections: EnquiryValues["selectedOfferings"]) {
+  return `
+  <ul style="margin:10px 0 0; padding-left:18px; font-family:ui-sans-serif, system-ui; font-size:14px; color:#111827;">
+    ${selections.map((item) => `<li>${escapeHtml(item.label)}</li>`).join("")}
+  </ul>
+  `;
+}
+
+function enquiryAdminEmailHTML(payload: EnquiryValues) {
+  return `
+  <div style="max-width:640px; margin:0 auto; padding:20px;">
+    <h2 style="margin:0 0 12px; font-family:ui-sans-serif, system-ui;">New Service Enquiry</h2>
+    <p style="margin:0 0 16px; font-family:ui-sans-serif, system-ui; font-size:14px; color:#111827;">
+      A customer has submitted a new website enquiry.
+    </p>
+    <table style="width:100%; border-collapse:collapse; font-family:ui-sans-serif, system-ui; font-size:14px;">
+      <tbody>
+        <tr>
+          <td style="padding:10px; border:1px solid #e5e7eb; background:#f9fafb;"><strong>Name</strong></td>
+          <td style="padding:10px; border:1px solid #e5e7eb;">${escapeHtml(payload.customerName)}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px; border:1px solid #e5e7eb; background:#f9fafb;"><strong>Email</strong></td>
+          <td style="padding:10px; border:1px solid #e5e7eb;">${escapeHtml(payload.customerEmail)}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px; border:1px solid #e5e7eb; background:#f9fafb;"><strong>Phone</strong></td>
+          <td style="padding:10px; border:1px solid #e5e7eb;">${escapeHtml(payload.customerPhone)}</td>
+        </tr>
+        <tr>
+          <td style="padding:10px; border:1px solid #e5e7eb; background:#f9fafb;"><strong>Message</strong></td>
+          <td style="padding:10px; border:1px solid #e5e7eb; white-space:pre-wrap;">${escapeHtml(payload.message)}</td>
+        </tr>
+      </tbody>
+    </table>
+    <h3 style="margin:18px 0 10px; font-family:ui-sans-serif, system-ui;">Selected Services</h3>
+    ${enquirySelectionsHTML(payload.selectedOfferings)}
+  </div>
+  `;
+}
+
+function enquiryCustomerEmailHTML(payload: EnquiryValues) {
+  return `
+  <div style="max-width:640px; margin:0 auto; padding:20px;">
+    <h2 style="margin:0 0 12px; font-family:ui-sans-serif, system-ui;">Enquiry Received</h2>
+    <p style="margin:0 0 16px; font-family:ui-sans-serif, system-ui; font-size:14px; color:#111827;">
+      Hi ${escapeHtml(payload.customerName)}, thanks for your enquiry. The team will review your request and reply soon.
+    </p>
+    <h3 style="margin:18px 0 10px; font-family:ui-sans-serif, system-ui;">You enquired about</h3>
+    ${enquirySelectionsHTML(payload.selectedOfferings)}
+    <p style="margin:18px 0 0; font-family:ui-sans-serif, system-ui; font-size:14px; color:#111827; white-space:pre-wrap;">
+      ${escapeHtml(payload.message)}
+    </p>
+  </div>
+  `;
+}
+
+export async function sendEnquiryEmails(payload: EnquiryValues) {
+  const transporter = getTransporter();
+  const from = "Bookings <bookings@cmmg.co.za>";
+  const admin = process.env.MAILTRAP_ADMIN_EMAIL;
+  if (!admin) throw new Error("ADMIN_EMAIL is not set");
+
+  await transporter.sendMail({
+    from,
+    to: payload.customerEmail,
+    subject: "CMMG enquiry received",
+    html: enquiryCustomerEmailHTML(payload),
+  });
+
+  await transporter.sendMail({
+    from,
+    to: admin,
+    subject: `New enquiry — ${payload.selectedOfferings.map((item) => item.label).join(", ")}`,
+    html: enquiryAdminEmailHTML(payload),
   });
 }
 
