@@ -1,5 +1,6 @@
 import BentoGrid from "@/components/BentoGrid";
 import BookingSection from "@/components/BookingSection";
+import InquiryOfferingsSection from "@/components/InquiryOfferingsSection";
 
 import { HeroSection } from "@/components/ruixen/hero-section-glass-web";
 import ServicesGrid from "@/components/ServiceGrid";
@@ -26,6 +27,7 @@ export default async function Home() {
       <BentoGrid />
       <StatsSection />
       <BookingSection packages={packages} />
+      <InquiryOfferingsSection />
     </div>
   );
 }
