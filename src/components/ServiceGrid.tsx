@@ -358,8 +358,8 @@ color: #000000;
                   <span aria-hidden="true">↗</span>
                 </a>
                 <p className="sg-rate-note">
-                  Opens the studio rate card PDF in a new tab so clients can
-                  view or download it directly from the browser.
+                  View our Rate Card for an in depth understanding of our
+                  offerings.
                 </p>
               </div>
               <span className="sg-count">
