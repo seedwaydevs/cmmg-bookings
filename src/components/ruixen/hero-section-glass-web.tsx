@@ -145,13 +145,16 @@ export function HeroSection({
         .hero-topbar {
           position: relative;
           z-index: 10;
-          padding-top: 96px; /* offset for fixed nav */
           display: flex;
           align-items: center;
           justify-content: space-between;
+          padding-top: 8rem;
+          max-width: 1440px;
+          width: 100%;
+          margin: 0 auto;
           padding-left: 3rem;
           padding-right: 3rem;
-          padding-top: 8rem;
+          box-sizing: border-box;
         }
         .hero-kicker {
           display: flex;
@@ -170,6 +173,7 @@ export function HeroSection({
           letter-spacing: 0.18em;
           text-transform: uppercase;
           color: rgba(255,255,255,0.45);
+          max-width: 1440px;
         }
         .hero-live {
           display: flex;
@@ -201,6 +205,7 @@ export function HeroSection({
           max-width: 1440px;
           width: 100%;
           margin: 0 auto;
+          box-sizing: border-box;
         }
 
         /* Title layout: big left + descriptor right */

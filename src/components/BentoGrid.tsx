@@ -83,7 +83,7 @@ const BentoGrid = () => {
         @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Syne:wght@700;800&family=Manrope:wght@400;500;600&display=swap');
 
         .bg-root {
-          background: #050505;
+          background: #f8f5ef;
           padding: 7rem 0 6rem;
           font-family: 'Syne', sans-serif;
           position: relative;
@@ -102,7 +102,7 @@ const BentoGrid = () => {
           justify-content: space-between;
           margin-bottom: 3.5rem;
           padding-bottom: 2.5rem;
-          border-bottom: 1px solid rgba(255,255,255,0.06);
+          border-bottom: 1px solid rgba(0,0,0,0.08);
         }
         .bg-header-left {}
         .bg-eyebrow {
@@ -121,7 +121,7 @@ const BentoGrid = () => {
           font-weight: 500;
           letter-spacing: 0.18em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.35);
+          color: rgba(0,0,0, 1);
         }
         .bg-title {
           font-family: 'Bricolage Grotesque', sans-serif;
@@ -130,7 +130,7 @@ const BentoGrid = () => {
           letter-spacing: -0.02em;
           line-height: 0.95;
           text-transform: uppercase;
-          color: #ffffff;
+          color: #050505;
         }
         .bg-title span { color: #f05a1a; }
         .bg-header-right {
@@ -141,25 +141,25 @@ const BentoGrid = () => {
         }
         .bg-count {
           font-family: 'Manrope', sans-serif;
-          font-size: 0.6rem;
+          font-size: 0.8rem;
           letter-spacing: 0.16em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.2);
+          color: rgba(0,0,0, 1);
         }
-        .bg-count strong { color: #1a8cff; }
+        .bg-count strong { color: #1a8cdd; }
         .bg-hint {
           font-family: 'Manrope', sans-serif;
-          font-size: 0.65rem;
+          font-size: 0.7rem;
           font-weight: 400;
           letter-spacing: 0.1em;
-          color: rgba(255,255,255,0.2);
+          color: rgba(0,0,0,1);
           display: flex;
           align-items: center;
           gap: 0.5rem;
         }
         .bg-hint-icon {
           width: 16px; height: 16px;
-          border: 1px solid rgba(255,255,255,0.15);
+          border: 1px solid rgba(0,0,0,0.18);
           display: flex; align-items: center; justify-content: center;
           font-size: 0.55rem;
         }
@@ -324,12 +324,12 @@ const BentoGrid = () => {
           align-items: center;
           justify-content: space-between;
           padding-top: 2.5rem;
-          border-top: 1px solid rgba(255,255,255,0.06);
+          border-top: 1px solid rgba(0,0,0,0.08);
         }
         .bg-cta-text {
           font-family: 'Manrope', sans-serif;
           font-size: 0.8rem;
-          color: rgba(255,255,255,0.3);
+          color: rgba(0,0,0,0.5);
           letter-spacing: 0.04em;
         }
         .bg-cta-btn {

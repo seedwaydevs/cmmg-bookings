@@ -188,7 +188,7 @@ export default function BookingSection({
         .bs-package-top { display: flex; justify-content: space-between; gap: 1rem; align-items: start; margin-bottom: 0.8rem; }
         .bs-package-name { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 700; color: #0a0a0a; margin: 0; }
         .bs-package-duration { font-family: 'Manrope', sans-serif; font-size: 0.72rem; color: rgba(0,0,0,0.42); margin-top: 0.2rem; }
-        .bs-package-price { font-family: 'Syne', sans-serif; font-size: 1rem; font-weight: 800; color: #0a0a0a; white-space: nowrap; }
+        .bs-package-price { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1rem; font-weight: 800; color: #0a0a0a; white-space: nowrap; }
         .bs-package-desc { font-family: 'Manrope', sans-serif; font-size: 0.82rem; line-height: 1.7; color: rgba(0,0,0,0.62); margin: 0 0 0.9rem; }
         .bs-package-includes { display: flex; flex-wrap: wrap; gap: 0.45rem; }
         .bs-package-pill { font-family: 'Manrope', sans-serif; font-size: 0.66rem; font-weight: 600; color: rgba(0,0,0,0.58); background: #f6f4ef; padding: 0.45rem 0.6rem; }
@@ -222,7 +222,7 @@ export default function BookingSection({
         .bs-summary-empty { font-family: 'Manrope', sans-serif; font-size: 0.82rem; line-height: 1.7; color: rgba(0,0,0,0.5); margin: 0; }
         .bs-summary-section { border-top: 1px solid rgba(0,0,0,0.08); padding-top: 1rem; }
         .bs-summary-kicker { font-family: 'Manrope', sans-serif; font-size: 0.55rem; font-weight: 700; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(0,0,0,0.36); margin-bottom: 0.5rem; }
-        .bs-summary-name { font-family: 'Syne', sans-serif; font-size: 1.3rem; font-weight: 800; color: #0a0a0a; margin: 0; }
+        .bs-summary-name { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.3rem; font-weight: 800; color: #0a0a0a; margin: 0; }
         .bs-summary-meta { font-family: 'Manrope', sans-serif; font-size: 0.82rem; line-height: 1.7; color: rgba(0,0,0,0.62); margin: 0.35rem 0 0; }
         .bs-summary-desc { font-family: 'Manrope', sans-serif; font-size: 0.84rem; line-height: 1.75; color: rgba(0,0,0,0.68); margin: 0; }
         .bs-summary-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.55rem; }
@@ -231,7 +231,7 @@ export default function BookingSection({
         .bs-summary-eligibility { padding: 0.9rem; background: rgba(240,90,26,0.1); font-family: 'Manrope', sans-serif; font-size: 0.76rem; line-height: 1.65; color: #9b3d15; }
         .bs-summary-total { display: flex; justify-content: space-between; align-items: end; gap: 1rem; padding-top: 1rem; border-top: 1px solid rgba(0,0,0,0.08); }
         .bs-summary-total-label { font-family: 'Manrope', sans-serif; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(0,0,0,0.4); }
-        .bs-summary-total-value { font-family: 'Syne', sans-serif; font-size: 1.5rem; font-weight: 800; color: #f05a1a; }
+        .bs-summary-total-value { font-family: 'Bricolage Grotesque', sans-serif; font-size: 1.5rem; font-weight: 800; color: #f05a1a; }
         @media (max-width: 980px) {
           .bs-layout { grid-template-columns: 1fr; }
           .bs-sidebar { position: static; order: -1; }

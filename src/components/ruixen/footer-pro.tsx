@@ -118,7 +118,7 @@ export default function Footer() {
           font-weight: 500;
           letter-spacing: 0.14em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.2);
+          color: rgba(255,255,255,0.5);
           text-align: right;
         }
         .ft-top-meta strong {
@@ -158,7 +158,7 @@ export default function Footer() {
           font-family: 'Manrope', sans-serif;
           font-size: 0.78rem;
           line-height: 1.75;
-          color: rgba(255,255,255,0.3);
+          color: rgba(255,255,255,0.58);
           margin: 0 0 2rem;
         }
         .ft-socials {
@@ -172,7 +172,7 @@ export default function Footer() {
           font-weight: 500;
           letter-spacing: 0.1em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.25);
+          color: rgba(255,255,255,0.55);
           text-decoration: none;
           display: flex;
           align-items: center;
@@ -201,7 +201,7 @@ export default function Footer() {
           font-weight: 600;
           letter-spacing: 0.18em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.2);
+          color: rgba(255,255,255,0.45);
           margin-bottom: 1.25rem;
           display: block;
         }
@@ -216,7 +216,7 @@ export default function Footer() {
           font-family: 'Syne', sans-serif;
           font-size: 0.85rem;
           font-weight: 600;
-          color: rgba(255,255,255,0.5);
+          color: rgba(255,255,255,0.72);
           text-decoration: none;
           letter-spacing: -0.01em;
           transition: color 0.2s;
@@ -231,7 +231,7 @@ export default function Footer() {
           font-weight: 600;
           letter-spacing: 0.18em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.2);
+          color: rgba(255,255,255,0.45);
           margin-bottom: 1.25rem;
           display: block;
         }
@@ -260,7 +260,7 @@ export default function Footer() {
           font-weight: 600;
           letter-spacing: 0.12em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.2);
+          color: rgba(255,255,255,0.48);
         }
         .ft-input {
           background: transparent;
@@ -276,7 +276,7 @@ export default function Footer() {
           transition: border-color 0.2s;
         }
         .ft-input:focus { border-color: #f05a1a; }
-        .ft-input::placeholder { color: rgba(255,255,255,0.18); }
+        .ft-input::placeholder { color: rgba(255,255,255,0.4); }
         .ft-textarea {
           background: transparent;
           border: none;
@@ -292,12 +292,12 @@ export default function Footer() {
           transition: border-color 0.2s;
         }
         .ft-textarea:focus { border-color: #f05a1a; }
-        .ft-textarea::placeholder { color: rgba(255,255,255,0.18); }
+        .ft-textarea::placeholder { color: rgba(255,255,255,0.4); }
         .ft-send-btn {
           align-self: flex-start;
           background: none;
           border: 1px solid rgba(255,255,255,0.15);
-          color: rgba(255,255,255,0.6);
+          color: rgba(255,255,255,0.78);
           font-family: 'Syne', sans-serif;
           font-size: 0.7rem;
           font-weight: 700;
@@ -333,7 +333,7 @@ export default function Footer() {
           font-size: 0.62rem;
           font-weight: 400;
           letter-spacing: 0.08em;
-          color: rgba(255,255,255,0.18);
+          color: rgba(255,255,255,0.48);
         }
         .ft-bottom-links {
           display: flex;
@@ -346,15 +346,15 @@ export default function Footer() {
           font-weight: 500;
           letter-spacing: 0.1em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.18);
+          color: rgba(255,255,255,0.5);
           text-decoration: none;
           transition: color 0.2s;
         }
-        .ft-bottom-link:hover { color: rgba(255,255,255,0.5); }
+        .ft-bottom-link:hover { color: rgba(255,255,255,0.82); }
         .ft-bottom-dot {
           width: 3px; height: 3px;
           border-radius: 50%;
-          background: rgba(255,255,255,0.12);
+          background: rgba(255,255,255,0.28);
         }
 
         /* ── RESPONSIVE ── */

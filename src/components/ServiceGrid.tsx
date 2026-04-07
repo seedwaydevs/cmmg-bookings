@@ -1,5 +1,7 @@
 import React from "react";
 
+const RATE_CARD_PATH = "/rate-cards/cmmg-studio-rate-card.pdf";
+
 const services = [
   {
     num: "01",
@@ -131,6 +133,41 @@ color: #000000;
         .sg-count strong {
           color: #1a8cff;
           font-weight: 600;
+        }
+        .sg-actions {
+          display: flex;
+          align-items: center;
+          gap: 0.85rem;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+        }
+        .sg-rate-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.6rem;
+          text-decoration: none;
+          background: #0a0a0a;
+          color: #fff;
+          font-family: 'Syne', sans-serif;
+          font-size: 0.74rem;
+          font-weight: 700;
+          letter-spacing: 0.1em;
+          text-transform: uppercase;
+          padding: 0.95rem 1.35rem;
+          transition: background 0.2s, transform 0.2s;
+        }
+        .sg-rate-btn:hover {
+          background: #1a1a1a;
+          transform: translateY(-1px);
+        }
+        .sg-rate-note {
+          font-family: 'Manrope', sans-serif;
+          font-size: 0.72rem;
+          line-height: 1.6;
+          color: rgba(0,0,0,0.45);
+          max-width: 260px;
+          text-align: right;
+          margin: 0;
         }
 
         /* ── GRID ── */
@@ -278,6 +315,8 @@ color: #000000;
           .sg-header { grid-template-columns: 1fr; }
           .sg-header-right { align-items: flex-start; }
           .sg-desc { text-align: left; }
+          .sg-actions { justify-content: flex-start; }
+          .sg-rate-note { text-align: left; }
         }
         @media (max-width: 640px) {
           .sg-root { padding: 5rem 0 4rem; }
@@ -308,6 +347,21 @@ color: #000000;
                 Everything you need to bring your creative vision to life —
                 professional spaces, world-class gear, all under one roof.
               </p>
+              <div className="sg-actions">
+                <a
+                  href={RATE_CARD_PATH}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="sg-rate-btn"
+                >
+                  View Rate Card
+                  <span aria-hidden="true">↗</span>
+                </a>
+                <p className="sg-rate-note">
+                  Opens the studio rate card PDF in a new tab so clients can
+                  view or download it directly from the browser.
+                </p>
+              </div>
               <span className="sg-count">
                 <strong>04</strong> / Facilities Available
               </span>
