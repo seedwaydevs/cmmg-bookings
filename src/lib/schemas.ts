@@ -75,7 +75,7 @@ export const enquirySchema = z.object({
   customerName: z.string().min(2, "Name is required"),
   customerEmail: z.string().email("Enter a valid email"),
   customerPhone: z.string().min(7, "Phone number is required"),
-  message: z.string().min(10, "Please share a few details about your enquiry"),
+  message: z.string().min(5, "Please share a few details about your enquiry"),
 });
 
 export type EnquiryValues = z.infer<typeof enquirySchema>;

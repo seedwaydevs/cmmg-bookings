@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client"
   output   = "../src/generated/prisma"
@@ -21,90 +15,70 @@ model Admin {
 }
 
 model Booking {
-  id      String         @id @default(cuid())
-  service BookingService @default(STUDIO)
-  date    DateTime
-
-  bookingName    String
-  bookingSurname String
-  email          String
-  idCopy         String?
-
-  packageId String
-  package   ServicePackage @relation(fields: [packageId], references: [id])
-
-  packageName          String @default("")
-  packageCategory      String @default("")
-  packageDurationLabel String @default("")
-  packageDescription   String?
-  packageIncludes      String[] @default([])
-  bundleEligibilityConfirmed Boolean @default(false)
-
-  durationMinutes Int
-
-  // booking price snapshot
-  priceCents Int
-  currency   String @default("ZAR")
-
-  // production add-ons snapshot — null if no extras were selected
-  extras          Json? // stores ExtrasPayload: { items, extrasTotal, grandTotal }
-  extrasCents     Int? // extras total in cents, for easy arithmetic with priceCents
-  grandTotalCents Int? // priceCents + extrasCents — the true invoice total
-
-  status BookingStatus @default(PENDING)
-
-  invoice Invoice? // 1 booking -> 0/1 invoice
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                         String         @id @default(cuid())
+  service                    BookingService @default(STUDIO)
+  date                       DateTime
+  bookingName                String
+  bookingSurname             String
+  email                      String
+  idCopy                     String?
+  packageId                  String
+  durationMinutes            Int
+  priceCents                 Int
+  currency                   String         @default("ZAR")
+  status                     BookingStatus  @default(PENDING)
+  createdAt                  DateTime       @default(now())
+  updatedAt                  DateTime       @updatedAt
+  extras                     Json?
+  extrasCents                Int?
+  grandTotalCents            Int?
+  bundleEligibilityConfirmed Boolean        @default(false)
+  packageCategory            String         @default("")
+  packageDescription         String?
+  packageDurationLabel       String         @default("")
+  packageIncludes            String[]       @default([])
+  packageName                String         @default("")
+  package                    ServicePackage @relation(fields: [packageId], references: [id])
+  invoice                    Invoice?
 
   @@index([email])
 }
 
 model Invoice {
-  id String @id @default(cuid())
-
-  bookingId String  @unique
-  booking   Booking @relation(fields: [bookingId], references: [id], onDelete: Cascade)
-
-  number String        @unique // e.g. "INV-2026-000123"
-  status InvoiceStatus @default(ISSUED)
-
-  // snapshot totals (don't compute later from packages)
+  id            String        @id @default(cuid())
+  bookingId     String        @unique
+  number        String        @unique
+  status        InvoiceStatus @default(ISSUED)
   subtotalCents Int
-  vatCents      Int    @default(0)
+  vatCents      Int           @default(0)
   totalCents    Int
-  currency      String @default("ZAR")
-
-  issuedAt DateTime  @default(now())
-  dueAt    DateTime?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  currency      String        @default("ZAR")
+  issuedAt      DateTime      @default(now())
+  dueAt         DateTime?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  booking       Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
 
 model ServicePackage {
-  id      String         @id @default(cuid())
-  slug    String?        @unique
-  service BookingService
-  category String        @default("")
-  name     String        @default("")
-  durationLabel String   @default("")
-  description   String?
-  includes      String[] @default([])
-  requiresPaidFullDayStudioBooking Boolean @default(false)
-  displayOrder  Int      @default(0)
-
-  minutes          Int
-  priceCents       Int
-  currency         String  @default("ZAR")
-  isBookableOnline Boolean @default(true)
-  isActive         Boolean @default(true)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  bookings Booking[]
+  id                               String         @id @default(cuid())
+  service                          BookingService
+  minutes                          Int
+  priceCents                       Int
+  currency                         String         @default("ZAR")
+  isActive                         Boolean        @default(true)
+  createdAt                        DateTime       @default(now())
+  updatedAt                        DateTime       @updatedAt
+  category                         String         @default("")
+  description                      String?
+  displayOrder                     Int            @default(0)
+  durationLabel                    String         @default("")
+  includes                         String[]       @default([])
+  isBookableOnline                 Boolean        @default(true)
+  name                             String         @default("")
+  requiresPaidFullDayStudioBooking Boolean        @default(false)
+  slug                             String?        @unique
+  bookings                         Booking[]
 
   @@index([service, isActive, isBookableOnline, displayOrder])
 }

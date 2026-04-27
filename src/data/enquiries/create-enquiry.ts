@@ -22,6 +22,7 @@ export async function createEnquiry(formData: FormData) {
     customerPhone: String(formData.get("customerPhone") ?? "").trim(),
     message: String(formData.get("message") ?? "").trim(),
   });
+  console.log(parsed)
 
   if (!parsed.success) {
     return {
