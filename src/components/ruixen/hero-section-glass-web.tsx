@@ -167,7 +167,7 @@ export function HeroSection({
         .hero-kicker-line { width: 28px; height: 1px; background: #f05a1a; }
         .hero-kicker-text {
           font-family: 'Manrope', sans-serif;
-          font-size: 0.65rem; font-weight: 500;
+          font-size: 0.55rem; font-weight: 500;
           letter-spacing: 0.18em; text-transform: uppercase;
           color: rgba(255,255,255,0.45);
         }
@@ -335,7 +335,7 @@ export function HeroSection({
 
         /* ── MOBILE ── */
         @media (max-width: 900px) {
-          .hero-root { height: 60svh; min-height: unset; }
+          .hero-root { height: 90svh; min-height: unset; }
           .hero-topbar { padding: 7rem 1.5rem 0; }
           .hero-content { padding: 0 1.5rem 4rem; }
           .hero-body { grid-template-columns: 1fr; gap: 2rem; }
@@ -347,9 +347,9 @@ export function HeroSection({
         }
         
         @media (max-width: 780px) {
-            .hero-title { font-size: clamp(2.5rem, 8vw, 4rem); }
+            .hero-title { font-size: clamp(2rem, 8vw, 1rem); }
             .hero-actions { flex-direction: column; align-items: flex-start; }
-            .hero-root { height: 60svh; min-height: unset; }
+            .hero-root { height: 80svh; min-height: unset; }
         }
       
       `}</style>

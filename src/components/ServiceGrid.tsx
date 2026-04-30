@@ -317,6 +317,11 @@ color: #000000;
           .sg-desc { text-align: left; }
           .sg-actions { justify-content: flex-start; }
           .sg-rate-note { text-align: left; }
+          .sg-title {
+          font-family: 'Bricolage Grotesque',
+sans-serif;
+font-weight: 800;
+font-size: clamp(3rem, 10vw, 7rem)
         }
         @media (max-width: 640px) {
           .sg-root { padding: 5rem 0 4rem; }
