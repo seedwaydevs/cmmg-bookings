@@ -13,8 +13,9 @@ export default async function Home() {
   return (
     <div>
       <HeroSection
-        title="Content And Media Bookings"
+        title="CMMG Bookings"
         imageSrc={studio5}
+        videoSrc="/ideation_clip_2.mp4"
         primaryAction={primaryAction}
         secondaryAction={secondaryAction}
         description="State-of-the-art recording studios and green screen facilities equipped with professional-grade equipment, pristine acoustic treatment, and cutting-edge film production technology. "
@@ -23,6 +24,7 @@ export default async function Home() {
         metaCenter="Content"
         metaRight="Studios"
       />
+
       <ServicesGrid />
       <BentoGrid />
       <StatsSection />
