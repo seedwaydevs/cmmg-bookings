@@ -82,7 +82,8 @@ function StatCard({
   );
 }
 
-const StatsSection = () => {
+// ── Add optional bgImage prop ──────────────────────────────────────────────
+const StatsSection = ({ bgImage }: { bgImage?: string }) => {
   const sectionRef = useRef<HTMLElement>(null);
   const [active, setActive] = useState(false);
 
@@ -102,7 +103,6 @@ const StatsSection = () => {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=Syne:wght@700;800&family=Manrope:wght@400;500;600&display=swap');
 
-        /* ── ROOT: fully dark section ── */
         .ss-root {
           background: #0a0a0a;
           font-family: 'Syne', sans-serif;
@@ -110,7 +110,65 @@ const StatsSection = () => {
           overflow: hidden;
         }
 
-        /* ── TOP HEADER BAND: white on dark ── */
+        /* ── BG IMAGE LAYER ── */
+        .ss-bg-image {
+          position: absolute;
+          inset: 0;
+          background-size: cover;
+          background-position: center;
+          filter: brightness(0.5) saturate(1.2);
+          z-index: 0;
+        }
+
+        /* ── GLASS OVERLAY ── */
+        .ss-glass-overlay {
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          background:
+            radial-gradient(ellipse 80% 60% at 20% 30%, rgba(240,90,26,0.15) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 80% at 80% 70%, rgba(26,140,255,0.12) 0%, transparent 60%),
+          
+          backdrop-filter: blur(2px);
+          -webkit-backdrop-filter: blur(2px);
+        }
+
+        /* ── CONTENT SITS ABOVE OVERLAYS ── */
+        .ss-inner {
+          position: relative;
+          z-index: 2;
+        }
+
+        /* ── GLASS CARDS (only when has-bg is present) ── */
+        .ss-root.has-bg .ss-card {
+          background: rgba(255, 255, 255, 0.04);
+          backdrop-filter: blur(16px) saturate(1.5);
+          -webkit-backdrop-filter: blur(16px) saturate(1.5);
+          border-color: rgba(255, 255, 255, 0.1);
+        }
+        .ss-root.has-bg .ss-card::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%);
+          pointer-events: none;
+        }
+        .ss-root.has-bg .ss-card:hover {
+          background: rgba(255, 255, 255, 0.08);
+          backdrop-filter: blur(24px) saturate(1.8);
+          -webkit-backdrop-filter: blur(24px) saturate(1.8);
+        }
+        .ss-root.has-bg .ss-grid   { border-color: rgba(255,255,255,0.1); }
+        .ss-root.has-bg .ss-head   { border-color: rgba(255,255,255,0.1); }
+        .ss-root.has-bg .ss-cta    {
+          background: rgba(0,0,0,0.2);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          border-color: rgba(255,255,255,0.1);
+        }
+
+        /* ── YOUR ORIGINAL CSS BELOW — UNCHANGED ── */
+
         .ss-head {
           padding: 6rem 3rem 5rem;
           max-width: 1260px;
@@ -137,8 +195,7 @@ const StatsSection = () => {
           color: rgba(255,255,255,0.3);
         }
         .ss-title {
-          font-family: 'Bricolage Grotesque',
-          sans-serif;
+          font-family: 'Bricolage Grotesque', sans-serif;
           font-weight: 800;
           font-size: clamp(5rem, 10vw, 6rem);
           letter-spacing: -0.02em;
@@ -162,16 +219,12 @@ const StatsSection = () => {
           text-align: right;
           margin: 0;
         }
-
-        /* ── STATS GRID ── */
         .ss-grid {
           display: grid;
           grid-template-columns: repeat(4, 1fr);
           border-top: 1px solid rgba(255,255,255,0.06);
           border-left: 1px solid rgba(255,255,255,0.06);
         }
-
-        /* ── CARD ── */
         .ss-card {
           position: relative;
           padding: 3rem 2.5rem;
@@ -182,8 +235,6 @@ const StatsSection = () => {
           background: #0a0a0a;
         }
         .ss-card:hover { background: #111; }
-
-        /* top accent bar slides in on hover */
         .ss-card-bar {
           position: absolute;
           top: 0; left: 0; right: 0;
@@ -195,7 +246,6 @@ const StatsSection = () => {
         .ss-card:hover .ss-card-bar { transform: scaleX(1); }
         .ss-card-bar.accent-orange { background: #f05a1a; }
         .ss-card-bar.accent-blue   { background: #1a8cff; }
-
         .ss-card-index {
           display: block;
           font-family: 'Manrope', sans-serif;
@@ -205,7 +255,6 @@ const StatsSection = () => {
           color: rgba(255,255,255,0.12);
           margin-bottom: 1.5rem;
         }
-
         .ss-number-row {
           display: flex;
           align-items: baseline;
@@ -229,19 +278,16 @@ const StatsSection = () => {
         }
         .ss-suffix.accent-orange { color: #f05a1a; }
         .ss-suffix.accent-blue   { color: #1a8cff; }
-
         .ss-divider {
           width: 28px;
           height: 1px;
           margin-bottom: 1.25rem;
           transition: width 0.4s ease, background 0.3s ease;
         }
-        .ss-divider.accent-orange { background: rgba(240,90,26,0.35); }
+        
         .ss-divider.accent-blue   { background: rgba(26,140,255,0.35); }
         .ss-card:hover .ss-divider { width: 52px; }
-        .ss-card:hover .ss-divider.accent-orange { background: #f05a1a; }
-        .ss-card:hover .ss-divider.accent-blue   { background: #1a8cff; }
-
+      
         .ss-label {
           font-family: 'Syne', sans-serif;
           font-size: 0.95rem;
@@ -252,7 +298,6 @@ const StatsSection = () => {
           transition: color 0.2s;
         }
         .ss-card:hover .ss-label { color: #fff; }
-
         .ss-desc {
           font-family: 'Manrope', sans-serif;
           font-size: 0.76rem;
@@ -262,7 +307,6 @@ const StatsSection = () => {
           transition: color 0.3s;
         }
         .ss-card:hover .ss-desc { color: rgba(255,255,255,0.42); }
-
         .ss-glow {
           position: absolute;
           bottom: -40%; right: -20%;
@@ -275,8 +319,6 @@ const StatsSection = () => {
         .ss-card:hover .ss-glow { opacity: 1; }
         .ss-glow.accent-orange { background: radial-gradient(circle, rgba(240,90,26,0.1) 0%, transparent 70%); }
         .ss-glow.accent-blue   { background: radial-gradient(circle, rgba(26,140,255,0.1) 0%, transparent 70%); }
-
-        /* ── CTA BAR ── */
         .ss-cta {
           border-top: 1px solid rgba(255,255,255,0.06);
           padding: 2.5rem 3rem;
@@ -289,7 +331,6 @@ const StatsSection = () => {
           align-items: center;
           justify-content: space-between;
           gap: 2rem;
-         
         }
         .ss-cta-eyebrow {
           font-family: 'Manrope', sans-serif;
@@ -328,14 +369,21 @@ const StatsSection = () => {
           transition: background 0.2s, transform 0.2s;
         }
         .ss-cta-btn:hover { background: #d44d14; transform: translateY(-1px); }
-
-        /* ── RESPONSIVE ── */
         @media (max-width: 1024px) {
           .ss-head { grid-template-columns: 1fr; padding: 5rem 2.5rem 4rem; }
           .ss-head-right { align-items: flex-start; }
           .ss-head-desc { text-align: left; }
           .ss-grid { grid-template-columns: repeat(2, 1fr); }
           .ss-cta { padding: 2.5rem; }
+          .ss-title {
+          font-family: 'Bricolage Grotesque', sans-serif;
+          font-weight: 800;
+          font-size: clamp(5rem, 10vw, 6rem);
+          letter-spacing: -0.02em;
+          line-height: 0.95;
+          text-transform: uppercase;
+          color: #ffffff;
+        }
         }
         @media (max-width: 640px) {
           .ss-head { padding: 4rem 1.5rem 3rem; }
@@ -347,45 +395,62 @@ const StatsSection = () => {
         }
       `}</style>
 
-      <section className="ss-root" ref={sectionRef}>
-        {/* Header */}
-        <div className="ss-head">
-          <div>
-            <div className="ss-eyebrow">
-              <div className="ss-eyebrow-line" />
-              <span className="ss-eyebrow-text">By The Numbers</span>
-            </div>
-            <h2 className="ss-title">
-              Trusted by
-              <br />
-              <span>Creators</span>
-            </h2>
-          </div>
-          <div className="ss-head-right">
-            <p className="ss-head-desc">
-              Our studios have been the birthplace of countless creative
-              projects — from debut singles to award-winning productions.
-            </p>
-          </div>
-        </div>
+      <section
+        className={`ss-root${bgImage ? " has-bg" : ""}`}
+        ref={sectionRef}
+      >
+        {/* BG image + glass overlay — only rendered when bgImage prop is passed */}
+        {bgImage && (
+          <>
+            <div
+              className="ss-bg-image"
+              style={{ backgroundImage: `url('${bgImage}')` }}
+            />
+            <div className="ss-glass-overlay" />
+          </>
+        )}
 
-        {/* Stats grid */}
-        <div className="ss-grid">
-          {stats.map((stat, i) => (
-            <StatCard key={i} stat={stat} index={i} active={active} />
-          ))}
-        </div>
-
-        {/* CTA bar */}
-        <div className="ss-cta">
-          <div className="ss-cta-inner">
+        {/* Wrap original markup in ss-inner so it sits above the overlays */}
+        <div className="ss-inner">
+          {/* Header */}
+          <div className="ss-head">
             <div>
-              <span className="ss-cta-eyebrow">Next Step</span>
-              <h3 className="ss-cta-heading">
-                Ready to create something <span>great?</span>
-              </h3>
+              <div className="ss-eyebrow">
+                <div className="ss-eyebrow-line" />
+                <span className="ss-eyebrow-text">By The Numbers</span>
+              </div>
+              <h2 className="ss-title">
+                Trusted by
+                <br />
+                <span>Creators</span>
+              </h2>
             </div>
-            <button className="ss-cta-btn">Book Your Session →</button>
+            <div className="ss-head-right">
+              <p className="ss-head-desc">
+                Our studios have been the birthplace of countless creative
+                projects — from debut singles to award-winning productions.
+              </p>
+            </div>
+          </div>
+
+          {/* Stats grid */}
+          <div className="ss-grid">
+            {stats.map((stat, i) => (
+              <StatCard key={i} stat={stat} index={i} active={active} />
+            ))}
+          </div>
+
+          {/* CTA bar */}
+          <div className="ss-cta">
+            <div className="ss-cta-inner">
+              <div>
+                <span className="ss-cta-eyebrow">Next Step</span>
+                <h3 className="ss-cta-heading">
+                  Ready to create something <span>great?</span>
+                </h3>
+              </div>
+              <button className="ss-cta-btn">Book Your Session →</button>
+            </div>
           </div>
         </div>
       </section>

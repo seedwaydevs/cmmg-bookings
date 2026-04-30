@@ -15,7 +15,7 @@ export default async function Home() {
       <HeroSection
         title="CMMG Bookings"
         imageSrc={studio5}
-        videoSrc="/ideation_clip_2.mp4"
+        videoSrc="/ideation_clip_3.mp4"
         primaryAction={primaryAction}
         secondaryAction={secondaryAction}
         description="State-of-the-art recording studios and green screen facilities equipped with professional-grade equipment, pristine acoustic treatment, and cutting-edge film production technology. "
@@ -27,7 +27,7 @@ export default async function Home() {
 
       <ServicesGrid />
       <BentoGrid />
-      <StatsSection />
+      <StatsSection bgImage="/nlue.jpg" />
       <BookingSection packages={packages} />
       <InquiryOfferingsSection />
     </div>

@@ -335,6 +335,7 @@ export function HeroSection({
 
         /* ── MOBILE ── */
         @media (max-width: 900px) {
+          .hero-root { height: 60svh; min-height: unset; }
           .hero-topbar { padding: 7rem 1.5rem 0; }
           .hero-content { padding: 0 1.5rem 4rem; }
           .hero-body { grid-template-columns: 1fr; gap: 2rem; }
@@ -342,11 +343,15 @@ export function HeroSection({
           .scroll-indicator { display: none; }
           .hero-meta-inner { padding: 0 1.5rem; }
           .hero-meta-center { display: none; }
+          .hero-title { font-size: clamp(2.5rem, 2vw, 4rem); }
         }
-        @media (max-width: 480px) {
-          .hero-title { font-size: clamp(2.5rem, 11vw, 4rem); }
-          .hero-actions { flex-direction: column; align-items: flex-start; }
+        
+        @media (max-width: 780px) {
+            .hero-title { font-size: clamp(2.5rem, 8vw, 4rem); }
+            .hero-actions { flex-direction: column; align-items: flex-start; }
+            .hero-root { height: 60svh; min-height: unset; }
         }
+      
       `}</style>
 
       <section className={`hero-root ${className}`} aria-label="Hero">
@@ -426,20 +431,6 @@ export function HeroSection({
                   </Link>
                 )}
               </div>
-            </div>
-
-            <div className="hero-right">
-              <div className="hero-divider" />
-              {description && <p className="hero-desc">{description}</p>}
-              {services && services.length > 0 && (
-                <div className="hero-tags">
-                  {services.map((s, i) => (
-                    <span key={i} className="hero-tag">
-                      {s}
-                    </span>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
         </div>
