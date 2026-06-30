@@ -113,7 +113,7 @@ export default function PromoPopup() {
         </svg>
       </button>
 
-      <div className="mx-auto flex min-h-full max-w-5xl flex-col items-center justify-center gap-8 px-5 py-16 pt-30 md:pt-0 md:grid md:grid-cols-2 md:items-center md:gap-10 md:text-left">
+      <div className="mx-auto flex min-h-[105vh] max-w-5xl flex-col items-center justify-center gap-8 px-5 py-16 pt-30 md:pt-0 md:grid md:grid-cols-2 md:items-center md:gap-10 md:text-left">
         {/* Left column (full width on mobile): headline, details, price, CTA */}
         <div className="flex flex-col items-center text-center md:items-start md:text-left">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/80">
