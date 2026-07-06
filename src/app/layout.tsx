@@ -4,6 +4,7 @@ import "./globals.css";
 import NavbarSimple from "@/components/ruixen/navbar-simple";
 import FooterPro from "@/components/ruixen/footer-pro";
 import PromoPopup from "@/components/PromoPopup";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,6 +35,8 @@ export default function RootLayout({
         <NavbarSimple />
         <div className="min-h-screen">{children}</div>
         <FooterPro />
+
+        <Analytics />
       </body>
     </html>
   );
