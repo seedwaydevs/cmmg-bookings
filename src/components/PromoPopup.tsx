@@ -9,8 +9,8 @@ const STORAGE_KEY = "cmmg_promo_seen_v2";
 const SHOW_DELAY_MS = 400;
 
 const PROMO_CONTENT = {
-  eyebrow: "Recording Special",
-  heading: "Record your single in one day.",
+  eyebrow: "CMMG Studios",
+  heading: "Recording Special",
   body: "All-inclusive studio session: recording, professional sound engineering, and industry-standard mixing & mastering.",
   ctaLabel: "Book & Secure Your Session",
   ctaHref: "#book",
@@ -113,7 +113,7 @@ export default function PromoPopup() {
         </svg>
       </button>
 
-      <div className="mx-auto flex min-h-[105vh] max-w-5xl flex-col items-center justify-center gap-8 px-5 py-16 pt-30 md:pt-0 md:grid md:grid-cols-2 md:items-center md:gap-10 md:text-left">
+      <div className="mx-auto flex min-h-[105vh] max-w-5xl flex-col items-center justify-center gap-8 px-5 py-16 pt-30 md:pt-18 md:grid md:grid-cols-2 md:items-center md:gap-10 md:text-left">
         {/* Left column (full width on mobile): headline, details, price, CTA */}
         <div className="flex flex-col items-center text-center md:items-start md:text-left">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-white/80">
@@ -121,7 +121,7 @@ export default function PromoPopup() {
           </p>
           <h2
             id="promo-popup-heading"
-            className="mt-3 max-w-xs text-3xl font-extrabold leading-tight text-white sm:text-4xl md:max-w-sm"
+            className="mt-3 max-w-xs text-3xl uppercase font-extrabold leading-tight text-white sm:text-4xl md:max-w-sm"
           >
             {PROMO_CONTENT.heading}
           </h2>

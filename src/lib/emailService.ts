@@ -2,11 +2,7 @@ import "server-only";
 import nodemailer from "nodemailer";
 
 import { BookingService } from "./schemas";
-import type {
-  BookingStatus,
-  EnquiryValues,
-  ExtrasPayload,
-} from "./schemas";
+import type { BookingStatus, EnquiryValues, ExtrasPayload } from "./schemas";
 
 type ServicePackage = {
   name: string;
@@ -256,7 +252,7 @@ function getTransporter() {
 export async function sendBookingEmails(payload: BookingEmailPayload) {
   const transporter = getTransporter();
 
-  const from = "Bookings <bookings@cmmg.co.za>";
+  const from = "Bookings <info@cmmg.co.za>";
   const admin = process.env.MAILTRAP_ADMIN_EMAIL;
   if (!admin) throw new Error("ADMIN_EMAIL is not set");
 
@@ -334,7 +330,7 @@ function enquiryCustomerEmailHTML(payload: EnquiryValues) {
 
 export async function sendEnquiryEmails(payload: EnquiryValues) {
   const transporter = getTransporter();
-  const from = "Bookings <bookings@cmmg.co.za>";
+  const from = "Bookings <info@cmmg.co.za>";
   const admin = process.env.MAILTRAP_ADMIN_EMAIL;
   if (!admin) throw new Error("ADMIN_EMAIL is not set");
 
