@@ -368,7 +368,7 @@ font-size: clamp(3rem, 10vw, 7rem)
                 </p>
               </div>
               <span className="sg-count">
-                <strong>04</strong> / Facilities Available
+                <strong>02</strong> / Facilities Available
               </span>
             </div>
           </div>

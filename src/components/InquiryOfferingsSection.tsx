@@ -8,12 +8,12 @@ import { INQUIRY_ONLY_OFFERINGS } from "@/data/services/offering-catalog";
 const CONTACT_DETAILS = [
   {
     label: "Enquiry Email",
-    value: "bookings@cmmg.co.za",
+    value: "info@cmmg.co.za",
     detail: "Best for quotes, availability questions, and custom briefs.",
   },
   {
     label: "Phone",
-    value: "+27 (0) 61-788-9902",
+    value: "+27 (0) 79-527-0356",
     detail: "Best for quick questions.",
   },
   {

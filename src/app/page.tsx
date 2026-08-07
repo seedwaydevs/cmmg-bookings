@@ -1,19 +1,16 @@
-import BentoGrid from "@/components/BentoGrid";
-import BookingSection from "@/components/BookingSection";
+import CtaBookingBand from "@/components/CtaBookingsBand";
+import InfoSection from "@/components/InfoSection";
 import InquiryOfferingsSection from "@/components/InquiryOfferingsSection";
-
 import { HeroSection } from "@/components/ruixen/hero-section-glass-web";
-import ServicesGrid from "@/components/ServiceGrid";
-import StatsSection from "@/components/StatsSection";
-import { getActivePackages } from "@/data/services/service-packages";
+import ServicesHighlight from "@/components/ServiceHighlight";
+import StudioCrossPromo from "@/components/StudioCrossPromo";
 import { studio5 } from "@/lib/imageData";
 
 export default async function Home() {
-  const packages = await getActivePackages();
   return (
     <div>
       <HeroSection
-        title="CMMG Bookings"
+        title="CMMG Studios"
         imageSrc={studio5}
         videoSrc="/ideation_clip_3.mp4"
         primaryAction={primaryAction}
@@ -24,11 +21,10 @@ export default async function Home() {
         metaCenter="Content"
         metaRight="Studios"
       />
-
-      <ServicesGrid />
-      <BentoGrid />
-      <StatsSection bgImage="/nlue.jpg" />
-      <BookingSection packages={packages} />
+      <StudioCrossPromo />
+      <InfoSection />
+      <ServicesHighlight />
+      <CtaBookingBand />
       <InquiryOfferingsSection />
     </div>
   );

@@ -19,9 +19,9 @@ import logo from "../../../public/cmmg-logo.png";
 const navLinks = [
   { title: "Home", link: "/" },
   { title: "About", link: "https://www.cmmg.co.za/about" },
-  { title: "Services", link: "#services" },
-  { title: "Gallery", link: "#gallery" },
-  { title: "Contact", link: "#contact" },
+  { title: "Studios", link: "/studio" },
+  { title: "Productions", link: "/production" },
+  { title: "Book Now", link: "/studio#book" },
 ];
 
 const Nav = () => {
