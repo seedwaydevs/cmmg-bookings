@@ -11,7 +11,7 @@ export default async function ProductionPage() {
     <div>
       <HeroSection
         kicker="CMMG Production"
-        title="Frame Story"
+        title="Story Telling"
         videoSrc="/ideation_clip_3.mp4"
         description="Film, photography, and content production shot and finished in-house — from concept through final cut, one crew carries it the whole way."
         primaryAction={{ href: "#enquiries", label: "Start an Enquiry" }}

@@ -7,65 +7,76 @@ import { INQUIRY_ONLY_OFFERINGS } from "@/data/services/offering-catalog";
 
 const CONTACT_DETAILS = [
   {
-    label: "Enquiry Email",
+    label: "Email",
     value: "info@cmmg.co.za",
-    detail: "Best for quotes, availability questions, and custom briefs.",
+    detail: "Quotes, availability & custom briefs.",
   },
   {
     label: "Phone",
     value: "+27 (0) 79-527-0356",
-    detail: "Best for quick questions.",
+    detail: "For quick questions.",
   },
   {
-    label: "Office Address",
+    label: "Office",
     value: "1 2nd Rd, Halfway House Estate, Midrand, 1685",
-    detail: "Where we call home. Feel free to visit.",
+    detail: "Feel free to visit.",
   },
 ];
 
 type Selection = {
   key: string;
   label: string;
+  meta?: string;
 };
 
 const GENERAL_ENQUIRY: Selection = {
   key: "general-enquiry",
   label: "General Enquiry",
+  meta: "A broader production or pricing question.",
 };
 
 export default function InquiryOfferingsSection() {
   const [pending, startTransition] = useTransition();
+
   const [formOpen, setFormOpen] = useState(false);
   const [selectedKeys, setSelectedKeys] = useState<string[]>([
     GENERAL_ENQUIRY.key,
   ]);
+
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
   const [message, setMessage] = useState("");
+
   const [status, setStatus] = useState<{
     type: "success" | "error";
     message: string;
   } | null>(null);
 
-  const selectionOptions = useMemo(
+  const selectionOptions = useMemo<Selection[]>(
     () => [
       GENERAL_ENQUIRY,
       ...INQUIRY_ONLY_OFFERINGS.map((offering) => ({
         key: `${offering.category}-${offering.name}`,
         label: `${offering.name} (${offering.priceLabel})`,
+        meta: `${offering.studio} · ${offering.category}`,
       })),
     ],
     [],
   );
 
+  const selectedOptions = selectionOptions.filter((option) =>
+    selectedKeys.includes(option.key),
+  );
+
   function toggleSelection(key: string) {
-    setSelectedKeys((prev) => {
-      if (prev.includes(key)) {
-        if (prev.length === 1) return prev;
-        return prev.filter((item) => item !== key);
+    setSelectedKeys((current) => {
+      if (current.includes(key)) {
+        if (current.length === 1) return current;
+        return current.filter((item) => item !== key);
       }
-      return [...prev, key];
+
+      return [...current, key];
     });
   }
 
@@ -73,12 +84,13 @@ export default function InquiryOfferingsSection() {
     event.preventDefault();
     setStatus(null);
 
-    const selectedOfferings: Selection[] = selectionOptions.filter((option) =>
+    const selectedOfferings = selectionOptions.filter((option) =>
       selectedKeys.includes(option.key),
     );
 
     startTransition(async () => {
       const formData = new FormData();
+
       formData.append("selectedOfferings", JSON.stringify(selectedOfferings));
       formData.append("customerName", customerName);
       formData.append("customerEmail", customerEmail);
@@ -88,11 +100,18 @@ export default function InquiryOfferingsSection() {
       const result = await createEnquiry(formData);
 
       if (!result.success) {
-        setStatus({ type: "error", message: result.message });
+        setStatus({
+          type: "error",
+          message: result.message,
+        });
         return;
       }
 
-      setStatus({ type: "success", message: result.message });
+      setStatus({
+        type: "success",
+        message: result.message,
+      });
+
       setSelectedKeys([GENERAL_ENQUIRY.key]);
       setCustomerName("");
       setCustomerEmail("");
@@ -106,333 +125,509 @@ export default function InquiryOfferingsSection() {
       <style>{`
         .io-root {
           background: #f8f5ef;
-          padding: 6rem 0;
-          border-top: 1px solid rgba(0,0,0,0.08);
+          padding: 5rem 0;
+          border-top: 1px solid rgba(0, 0, 0, 0.08);
         }
+
         .io-inner {
-          max-width: 1260px;
+          width: min(1100px, calc(100% - 2.5rem));
           margin: 0 auto;
-          padding: 0 2rem;
         }
+
+        /* Header */
+
         .io-header {
           display: grid;
-          grid-template-columns: 1.2fr 1fr;
-          gap: 2rem;
+          grid-template-columns: 1.2fr 0.8fr;
+          gap: 4rem;
           align-items: end;
           margin-bottom: 2.5rem;
         }
+
         .io-title {
-          font-family: 'Bricolage Grotesque', sans-serif;
+          margin: 0;
+          color: #0a0a0a;
+          font-family: "Bricolage Grotesque", sans-serif;
+          font-size: clamp(2.8rem, 7vw, 5rem);
           font-weight: 800;
-          font-size: clamp(3rem, 8vw, 5rem);
-          line-height: 0.95;
-          letter-spacing: -0.03em;
+          line-height: 0.9;
+          letter-spacing: -0.04em;
           text-transform: uppercase;
-          margin: 0;
-          color: #0a0a0a;
         }
-        .io-title span { color: #f05a1a; }
+
+        .io-title span {
+          color: #f05a1a;
+        }
+
         .io-copy {
-          font-family: 'Manrope', sans-serif;
-          font-size: 0.95rem;
+          margin: 0;
+          max-width: 420px;
+          color: rgba(0, 0, 0, 0.55);
+          font-family: "Manrope", sans-serif;
+          font-size: 0.9rem;
           line-height: 1.7;
-          color: rgba(0,0,0,0.58);
-          margin: 0;
         }
-        .io-contact-block {
-          margin-top: 2rem;
-          padding-top: 1.5rem;
-          border-top: 1px solid rgba(0,0,0,0.08);
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 1rem;
-        }
-        .io-contact-item {
-          display: grid;
-          gap: 0.35rem;
-        }
-        .io-contact-label {
-          display: block;
-          font-family: 'Manrope', sans-serif;
-          font-size: 0.58rem;
-          font-weight: 700;
-          letter-spacing: 0.16em;
-          text-transform: uppercase;
-          color: rgba(0,0,0,0.36);
-          margin-bottom: 0.6rem;
-        }
-        .io-contact-value {
-          font-family: 'Syne', sans-serif;
-          font-size: 1rem;
-          font-weight: 700;
-          color: #0a0a0a;
-          margin: 0 0 0.4rem;
-        }
-        .io-contact-detail {
-          font-family: 'Manrope', sans-serif;
-          font-size: 0.8rem;
-          line-height: 1.6;
-          color: rgba(0,0,0,0.56);
-          margin: 0;
-        }
+
+        /* Main card */
+
         .io-card {
           background: #fff;
-          border: 1px solid rgba(0,0,0,0.08);
+          border: 1px solid rgba(0, 0, 0, 0.08);
           padding: 1.5rem;
         }
-        .io-section-label {
+
+        .io-section-label,
+        .io-label,
+        .io-contact-label {
           display: block;
-          font-family: 'Manrope', sans-serif;
-          font-size: 0.58rem;
+          margin-bottom: 0.55rem;
+          color: rgba(0, 0, 0, 0.38);
+          font-family: "Manrope", sans-serif;
+          font-size: 0.6rem;
           font-weight: 700;
-          letter-spacing: 0.16em;
+          letter-spacing: 0.14em;
           text-transform: uppercase;
-          color: rgba(0,0,0,0.36);
-          margin-bottom: 1rem;
         }
-        .io-grid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 0.9rem;
+
+        /* Service selector */
+
+        .io-selector {
+          position: relative;
         }
-        .io-service-btn {
-          width: 100%;
-          text-align: left;
-          background: #faf8f4;
-          border: 1px solid rgba(0,0,0,0.08);
-          padding: 1rem;
-          cursor: pointer;
-          transition: border-color 0.2s, background 0.2s, transform 0.2s;
-        }
-        .io-service-btn:hover {
-          border-color: rgba(240,90,26,0.42);
-          transform: translateY(-1px);
-        }
-        .io-service-btn.active {
-          background: rgba(240,90,26,0.08);
-          border-color: #f05a1a;
-        }
-        .io-service-name {
-          display: block;
-          font-family: 'Syne', sans-serif;
-          font-size: 0.92rem;
-          font-weight: 700;
-          color: #0a0a0a;
-          margin-bottom: 0.35rem;
-        }
-        .io-service-meta {
-          font-family: 'Manrope', sans-serif;
-          font-size: 0.76rem;
-          line-height: 1.55;
-          color: rgba(0,0,0,0.56);
-        }
-        .io-selected {
-          margin-top: 1rem;
-          font-family: 'Manrope', sans-serif;
-          font-size: 0.8rem;
-          line-height: 1.6;
-          color: rgba(0,0,0,0.6);
-        }
-        .io-trigger-row {
+
+        .io-selector summary {
           display: flex;
+          align-items: center;
           justify-content: space-between;
           gap: 1rem;
+          padding: 1rem;
+          background: #faf8f4;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+          cursor: pointer;
+          list-style: none;
+          color: #0a0a0a;
+          font-family: "Manrope", sans-serif;
+          font-size: 0.9rem;
+        }
+
+        .io-selector summary::-webkit-details-marker {
+          display: none;
+        }
+
+        .io-selector summary::after {
+          content: "+";
+          color: #f05a1a;
+          font-size: 1.2rem;
+          font-weight: 400;
+        }
+
+        .io-selector[open] summary {
+          border-color: #f05a1a;
+        }
+
+        .io-selector[open] summary::after {
+          content: "−";
+        }
+
+        .io-selector-menu {
+          display: grid;
+          gap: 0.4rem;
+          margin-top: 0.5rem;
+          padding: 0.5rem;
+          background: #fff;
+          border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .io-option {
+          display: flex;
           align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          width: 100%;
+          padding: 0.8rem;
+          border: 0;
+          background: transparent;
+          text-align: left;
+          cursor: pointer;
+        }
+
+        .io-option:hover {
+          background: #faf8f4;
+        }
+
+        .io-option.active {
+          background: rgba(240, 90, 26, 0.08);
+        }
+
+        .io-option-info {
+          display: grid;
+          gap: 0.2rem;
+        }
+
+        .io-option-name {
+          color: #0a0a0a;
+          font-family: "Manrope", sans-serif;
+          font-size: 0.85rem;
+          font-weight: 700;
+        }
+
+        .io-option-meta {
+          color: rgba(0, 0, 0, 0.45);
+          font-family: "Manrope", sans-serif;
+          font-size: 0.7rem;
+        }
+
+        .io-check {
+          color: #f05a1a;
+          font-size: 0.9rem;
+          font-weight: 700;
+        }
+
+        /* Selected services */
+
+        .io-selected {
+          display: flex;
           flex-wrap: wrap;
-          margin-top: 1.25rem;
+          gap: 0.45rem;
+          margin: 0.8rem 0 0;
         }
-        .io-trigger-copy {
-          font-family: 'Manrope', sans-serif;
-          font-size: 0.82rem;
-          line-height: 1.6;
-          color: rgba(0,0,0,0.56);
-          margin: 0;
-          max-width: 560px;
+
+        .io-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+          padding: 0.4rem 0.65rem;
+          background: #f8f5ef;
+          color: #0a0a0a;
+          font-family: "Manrope", sans-serif;
+          font-size: 0.7rem;
         }
+
+        .io-pill button {
+          padding: 0;
+          border: 0;
+          background: transparent;
+          color: rgba(0, 0, 0, 0.4);
+          cursor: pointer;
+          font-size: 0.85rem;
+        }
+
+        /* CTA */
+
         .io-trigger {
-          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 1rem;
+          margin-top: 1.5rem;
+          padding-top: 1.25rem;
+          border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .io-trigger-copy {
+          margin: 0;
+          color: rgba(0, 0, 0, 0.5);
+          font-family: "Manrope", sans-serif;
+          font-size: 0.78rem;
+          line-height: 1.5;
+        }
+
+        .io-button {
+          flex-shrink: 0;
+          border: 0;
           background: #0a0a0a;
           color: #fff;
-          padding: 0.95rem 1.35rem;
-          font-family: 'Syne', sans-serif;
-          font-size: 0.76rem;
+          padding: 0.9rem 1.2rem;
+          font-family: "Syne", sans-serif;
+          font-size: 0.7rem;
           font-weight: 700;
-          letter-spacing: 0.1em;
+          letter-spacing: 0.08em;
           text-transform: uppercase;
           cursor: pointer;
         }
-        .io-form-wrap {
-          margin-top: 1.25rem;
+
+        .io-button:hover {
+          background: #f05a1a;
         }
+
+        /* Form */
+
+        .io-form-wrap {
+          margin-top: 1rem;
+        }
+
         .io-form {
-          display: flex;
-          flex-direction: column;
+          display: grid;
           gap: 1rem;
         }
+
         .io-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
           gap: 1rem;
         }
+
         .io-field {
-          display: flex;
-          flex-direction: column;
-          gap: 0.45rem;
+          display: grid;
+          gap: 0.4rem;
         }
+
         .io-label {
-          font-family: 'Manrope', sans-serif;
-          font-size: 0.62rem;
-          font-weight: 700;
-          letter-spacing: 0.14em;
-          text-transform: uppercase;
-          color: rgba(0,0,0,0.38);
+          margin: 0;
         }
-        .io-input, .io-textarea {
+
+        .io-input,
+        .io-textarea {
           width: 100%;
-          border: 1px solid rgba(0,0,0,0.12);
+          box-sizing: border-box;
+          border: 1px solid rgba(0, 0, 0, 0.12);
           background: #fff;
-          padding: 0.9rem 1rem;
-          font-family: 'Manrope', sans-serif;
-          font-size: 0.9rem;
+          padding: 0.85rem 0.9rem;
           color: #0a0a0a;
+          font-family: "Manrope", sans-serif;
+          font-size: 0.85rem;
           outline: none;
         }
-        .io-input:focus, .io-textarea:focus {
+
+        .io-input:focus,
+        .io-textarea:focus {
           border-color: #f05a1a;
         }
+
         .io-textarea {
-          min-height: 150px;
+          min-height: 130px;
           resize: vertical;
         }
+
         .io-actions {
           display: flex;
+          align-items: center;
           justify-content: space-between;
           gap: 1rem;
-          align-items: center;
-          flex-wrap: wrap;
-          margin-top: 0.5rem;
+          margin-top: 0.25rem;
         }
+
         .io-note {
-          font-family: 'Manrope', sans-serif;
-          font-size: 0.78rem;
-          line-height: 1.6;
-          color: rgba(0,0,0,0.5);
+          max-width: 500px;
           margin: 0;
-          max-width: 340px;
+          color: rgba(0, 0, 0, 0.45);
+          font-family: "Manrope", sans-serif;
+          font-size: 0.72rem;
+          line-height: 1.5;
         }
+
         .io-submit {
-          border: none;
+          flex-shrink: 0;
+          border: 0;
           background: #0a0a0a;
           color: #fff;
-          padding: 0.95rem 1.35rem;
-          font-family: 'Syne', sans-serif;
-          font-size: 0.76rem;
+          padding: 0.9rem 1.2rem;
+          font-family: "Syne", sans-serif;
+          font-size: 0.7rem;
           font-weight: 700;
-          letter-spacing: 0.1em;
+          letter-spacing: 0.08em;
           text-transform: uppercase;
           cursor: pointer;
         }
+
         .io-submit:disabled {
           opacity: 0.5;
           cursor: not-allowed;
         }
+
+        /* Status */
+
         .io-status {
-          margin-top: 1rem;
-          padding: 0.85rem 1rem;
+          padding: 0.8rem 1rem;
           border-left: 3px solid;
-          font-family: 'Manrope', sans-serif;
-          font-size: 0.8rem;
+          font-family: "Manrope", sans-serif;
+          font-size: 0.78rem;
         }
+
         .io-status.success {
           border-color: #22c55e;
+          background: rgba(34, 197, 94, 0.06);
           color: #15803d;
-          background: rgba(34,197,94,0.06);
         }
+
         .io-status.error {
           border-color: #d93030;
+          background: rgba(217, 48, 48, 0.06);
           color: #b91c1c;
-          background: rgba(217,48,48,0.06);
         }
-        @media (max-width: 920px) {
-          .io-grid,
-          .io-row, .io-contact-block {
+
+        /* Contact */
+
+        .io-contact {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2rem;
+          margin-top: 3rem;
+          padding-top: 1.5rem;
+          border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+
+        .io-contact-item {
+          min-width: 0;
+        }
+
+        .io-contact-label {
+          margin-bottom: 0.35rem;
+        }
+
+        .io-contact-value {
+          margin: 0;
+          color: #0a0a0a;
+          font-family: "Syne", sans-serif;
+          font-size: 0.9rem;
+          font-weight: 700;
+        }
+
+        .io-contact-detail {
+          margin: 0.25rem 0 0;
+          color: rgba(0, 0, 0, 0.45);
+          font-family: "Manrope", sans-serif;
+          font-size: 0.72rem;
+        }
+
+        @media (max-width: 800px) {
+          .io-header {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+          }
+
+          .io-row,
+          .io-contact {
             grid-template-columns: 1fr;
           }
+
+          .io-actions,
+          .io-trigger {
+            align-items: stretch;
+            flex-direction: column;
+          }
+
+          .io-button,
+          .io-submit {
+            width: 100%;
+          }
         }
-        @media (max-width: 780px) {
-          .io-root { padding: 4.5rem 0; }
-          .io-inner { padding: 0 1.25rem; }
-          .io-header { grid-template-columns: 1fr; }
+
+        @media (max-width: 600px) {
+          .io-root {
+            padding: 4rem 0;
+          }
+
+          .io-inner {
+            width: min(100% - 1.5rem, 1100px);
+          }
+
+          .io-card {
+            padding: 1.1rem;
+          }
+
+          .io-title {
+            font-size: clamp(2.5rem, 14vw, 4rem);
+          }
         }
       `}</style>
+
       <section className="io-root" id="enquiries">
         <div className="io-inner">
+          {/* Header */}
           <div className="io-header">
             <h2 className="io-title">
               Custom Work By <span>Enquiry</span>
             </h2>
+
             <p className="io-copy">
-              For services that need a bit more planning, submit an enquiry
-              right here on our site. Choose one or more services, leave a
-              general enquiry, and send your contact details in one step.
+              Need something that requires a little more planning? Tell us what
+              you need and we&apos;ll take it from there.
             </p>
           </div>
 
+          {/* Enquiry selector */}
           <section className="io-card">
-            <span className="io-section-label">Choose Services</span>
-            <div className="io-grid">
-              {selectionOptions.map((option) => {
-                const offering = INQUIRY_ONLY_OFFERINGS.find(
-                  (item) => `${item.category}-${item.name}` === option.key,
-                );
+            <span className="io-section-label">What can we help with?</span>
 
-                return (
-                  <button
-                    key={option.key}
-                    type="button"
-                    className={`io-service-btn ${selectedKeys.includes(option.key) ? "active" : ""}`}
-                    onClick={() => toggleSelection(option.key)}
-                  >
-                    <span className="io-service-name">{option.label}</span>
-                    <span className="io-service-meta">
-                      {offering
-                        ? `${offering.studio} · ${offering.category}`
-                        : "Use this for broader production or pricing questions."}
-                    </span>
-                  </button>
-                );
-              })}
+            <details className="io-selector">
+              <summary>
+                {selectedOptions.length === 1
+                  ? selectedOptions[0].label
+                  : `${selectedOptions.length} services selected`}
+              </summary>
+
+              <div className="io-selector-menu">
+                {selectionOptions.map((option) => {
+                  const selected = selectedKeys.includes(option.key);
+
+                  return (
+                    <button
+                      key={option.key}
+                      type="button"
+                      className={`io-option ${selected ? "active" : ""}`}
+                      onClick={() => toggleSelection(option.key)}
+                    >
+                      <span className="io-option-info">
+                        <span className="io-option-name">{option.label}</span>
+
+                        {option.meta && (
+                          <span className="io-option-meta">{option.meta}</span>
+                        )}
+                      </span>
+
+                      {selected && <span className="io-check">✓</span>}
+                    </button>
+                  );
+                })}
+              </div>
+            </details>
+
+            {/* Selected services */}
+            <div className="io-selected">
+              {selectedOptions.map((option) => (
+                <span className="io-pill" key={option.key}>
+                  {option.label}
+
+                  {selectedKeys.length > 1 && (
+                    <button
+                      type="button"
+                      aria-label={`Remove ${option.label}`}
+                      onClick={() => toggleSelection(option.key)}
+                    >
+                      ×
+                    </button>
+                  )}
+                </span>
+              ))}
             </div>
-            <p className="io-selected">
-              Selected:{" "}
-              {selectionOptions
-                .filter((option) => selectedKeys.includes(option.key))
-                .map((option) => option.label)
-                .join(", ")}
-            </p>
-            <div className="io-trigger-row">
+
+            {/* CTA */}
+            <div className="io-trigger">
               <p className="io-trigger-copy">
-                Once you&apos;ve chosen the services you want to ask about, open
-                the enquiry form and send your project brief without leaving the
-                page.
+                Select one or more services, then tell us about your project.
               </p>
+
               <button
                 type="button"
-                className="io-trigger"
+                className="io-button"
                 onClick={() => setFormOpen((value) => !value)}
               >
-                {formOpen ? "Hide Enquiry Form" : "Email Enquiry"}
+                {formOpen ? "Close Form" : "Start an Enquiry"}
               </button>
             </div>
           </section>
 
+          {/* Form */}
           {formOpen && (
             <section className="io-card io-form-wrap" id="contact">
-              <span className="io-section-label">Send Enquiry</span>
+              <span className="io-section-label">Your Details</span>
+
               <form className="io-form" onSubmit={onSubmit}>
                 <div className="io-row">
                   <label className="io-field">
                     <span className="io-label">Name</span>
+
                     <input
                       className="io-input"
                       value={customerName}
@@ -440,8 +635,10 @@ export default function InquiryOfferingsSection() {
                       placeholder="Your full name"
                     />
                   </label>
+
                   <label className="io-field">
                     <span className="io-label">Email</span>
+
                     <input
                       type="email"
                       className="io-input"
@@ -451,8 +648,10 @@ export default function InquiryOfferingsSection() {
                     />
                   </label>
                 </div>
+
                 <label className="io-field">
-                  <span className="io-label">Phone Number</span>
+                  <span className="io-label">Phone</span>
+
                   <input
                     className="io-input"
                     value={customerPhone}
@@ -460,20 +659,24 @@ export default function InquiryOfferingsSection() {
                     placeholder="+27 ..."
                   />
                 </label>
+
                 <label className="io-field">
                   <span className="io-label">Tell Us What You Need</span>
+
                   <textarea
                     className="io-textarea"
                     value={message}
                     onChange={(event) => setMessage(event.target.value)}
-                    placeholder="Share the project type, preferred dates, number of people involved, turnaround expectations, and anything else that will help the team quote properly."
+                    placeholder="Tell us about the project, dates, people involved, turnaround, or anything else that will help us understand what you need."
                   />
                 </label>
+
                 <div className="io-actions">
                   <p className="io-note">
-                    Select multiple services above, or keep it broad with a
-                    general enquiry and explain the project in the message box.
+                    We&apos;ll review your enquiry and get back to you with the
+                    next steps.
                   </p>
+
                   <button
                     className="io-submit"
                     type="submit"
@@ -482,6 +685,7 @@ export default function InquiryOfferingsSection() {
                     {pending ? "Sending..." : "Send Enquiry"}
                   </button>
                 </div>
+
                 {status && (
                   <div className={`io-status ${status.type}`}>
                     {status.message}
@@ -491,11 +695,14 @@ export default function InquiryOfferingsSection() {
             </section>
           )}
 
-          <div className="io-contact-block">
+          {/* Contact details */}
+          <div className="io-contact">
             {CONTACT_DETAILS.map((item) => (
               <article className="io-contact-item" key={item.label}>
                 <span className="io-contact-label">{item.label}</span>
+
                 <p className="io-contact-value">{item.value}</p>
+
                 <p className="io-contact-detail">{item.detail}</p>
               </article>
             ))}
