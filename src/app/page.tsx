@@ -10,12 +10,12 @@ export default async function Home() {
   return (
     <div>
       <HeroSection
-        title="CMMG Studios"
+        title="CMMG Bookings"
         imageSrc={studio5}
         videoSrc="/ideation_clip_3.mp4"
         primaryAction={primaryAction}
         secondaryAction={secondaryAction}
-        description="State-of-the-art recording studios and green screen facilities equipped with professional-grade equipment, pristine acoustic treatment, and cutting-edge film production technology. "
+        description="Book professional music recording studios, green screen production spaces, and podcast sessions with clear packages, transparent pricing, and the support your project needs."
         services={["Recording Studios", "Green Screen Studio", "Final Mix"]}
         metaLeft="Music"
         metaCenter="Content"
@@ -31,10 +31,10 @@ export default async function Home() {
 }
 
 const primaryAction = {
-  href: "#book",
-  label: "Book A Session",
+  href: "#services",
+  label: "Explore Studios",
 };
 const secondaryAction = {
-  href: "#services",
-  label: "Browse Services",
+  href: "#enquiries",
+  label: "Explore Productions",
 };

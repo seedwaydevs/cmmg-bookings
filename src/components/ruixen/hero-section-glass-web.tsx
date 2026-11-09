@@ -73,7 +73,7 @@ export function HeroSection({
           display: flex;
           flex-direction: column;
           overflow: hidden;
-          background: #050505;
+          background: #ffffff;
           font-family: 'Syne', sans-serif;
         }
 
@@ -82,6 +82,7 @@ export function HeroSection({
           position: absolute;
           inset: 0;
           z-index: 0;
+          display: none;
         }
 
         /* Video bg */
@@ -169,14 +170,14 @@ export function HeroSection({
           font-family: 'Manrope', sans-serif;
           font-size: 0.55rem; font-weight: 500;
           letter-spacing: 0.18em; text-transform: uppercase;
-          color: rgba(255,255,255,0.45);
+          color: rgba(0,0,0,0.45);
         }
         .hero-live {
           display: flex; align-items: center; gap: 0.5rem;
           font-family: 'Manrope', sans-serif;
           font-size: 0.65rem; font-weight: 500;
           letter-spacing: 0.12em;
-          color: rgba(255,255,255,0.35);
+          color: rgba(0,0,0,0.45);
         }
         .hero-live-dot {
           width: 5px; height: 5px;
@@ -209,7 +210,7 @@ export function HeroSection({
           font-family: 'Manrope', sans-serif;
           font-size: 0.65rem; font-weight: 400;
           letter-spacing: 0.2em;
-          color: rgba(255,255,255,0.6);
+          color: rgba(0,0,0,0.45);
           margin-bottom: 1.25rem;
           display: block;
         }
@@ -218,12 +219,20 @@ export function HeroSection({
           font-weight: 800;
           font-size: clamp(5rem, 10vw, 7rem);
           letter-spacing: -0.02em; line-height: 0.95;
-          text-transform: uppercase; color: #ffffff;
+          text-transform: uppercase; color: #0a0a0a;
         }
         .hero-title em { font-style: normal; color: #f05a1a; }
         .hero-actions {
           display: flex; align-items: center;
           gap: 1rem; margin-top: 2.5rem;
+        }
+        .hero-description {
+          max-width: 680px;
+          margin: 1.5rem 0 0;
+          font-family: 'Manrope', sans-serif;
+          font-size: 1rem;
+          line-height: 1.8;
+          color: rgba(0,0,0,0.58);
         }
         .btn-primary {
           display: inline-flex; align-items: center; gap: 0.6rem;
@@ -241,17 +250,17 @@ export function HeroSection({
         .btn-primary:hover .btn-primary-arrow { transform: translateX(3px); }
         .btn-secondary {
           display: inline-flex; align-items: center; gap: 0.5rem;
-          color: rgba(255,255,255,0.55);
+          color: rgba(0,0,0,0.62);
           font-family: 'Manrope', sans-serif;
           font-size: 0.72rem; font-weight: 500;
           letter-spacing: 0.1em; text-transform: uppercase;
           text-decoration: none;
-          border-bottom: 1px solid rgba(255,255,255,0.18);
+          border-bottom: 1px solid rgba(0,0,0,0.2);
           padding-bottom: 2px;
           transition: color 0.2s, border-color 0.2s;
           white-space: nowrap;
         }
-        .btn-secondary:hover { color: #fff; border-color: #fff; }
+        .btn-secondary:hover { color: #f05a1a; border-color: #f05a1a; }
         .hero-right {
           display: flex; flex-direction: column;
           gap: 1.75rem; padding-bottom: 0.5rem;
@@ -280,8 +289,8 @@ export function HeroSection({
           position: absolute;
           bottom: 0; left: 0; right: 0;
           z-index: 10;
-          border-top: 1px solid rgba(255,255,255,0.06);
-          background: rgba(5,5,5,0.4);
+          border-top: 1px solid rgba(0,0,0,0.08);
+          background: rgba(255,255,255,0.9);
           backdrop-filter: blur(8px);
           -webkit-backdrop-filter: blur(8px);
         }
@@ -295,7 +304,7 @@ export function HeroSection({
           font-family: 'Manrope', sans-serif;
           font-size: 0.6rem; font-weight: 500;
           letter-spacing: 0.16em; text-transform: uppercase;
-          color: rgba(255,255,255,0.28);
+          color: rgba(0,0,0,0.42);
         }
         .hero-meta-center { display: flex; align-items: center; gap: 1.25rem; }
         .hero-meta-sep {
@@ -315,12 +324,12 @@ export function HeroSection({
           font-family: 'Manrope', sans-serif;
           font-size: 0.55rem; letter-spacing: 0.2em;
           text-transform: uppercase;
-          color: rgba(255,255,255,0.25);
+          color: rgba(0,0,0,0.4);
           writing-mode: vertical-rl;
         }
         .scroll-line {
           width: 1px; height: 48px;
-          background: rgba(255,255,255,0.12);
+          background: rgba(0,0,0,0.12);
           position: relative; overflow: hidden;
         }
         .scroll-line::after {
@@ -418,6 +427,9 @@ export function HeroSection({
                   ),
                 )}
               </h1>
+              {description && (
+                <p className="hero-description">{description}</p>
+              )}
               <div className="hero-actions">
                 {primaryAction && (
                   <Link href={primaryAction.href} className="btn-primary">
