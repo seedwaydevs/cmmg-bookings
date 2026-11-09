@@ -1,6 +1,6 @@
 import React from "react";
 
-const RATE_CARD_PATH = "/rate-cards/cmmg-production-rate-card.pdf";
+const RATE_CARD_PATH = "/rate-cards/cmmg-studio-rate-card.pdf";
 
 const services = [
   {
